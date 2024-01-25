@@ -4,7 +4,7 @@
 
 -- DROP TABLE main.test;
 
--- Chad is chaining this
+-- Eliza is changing this comment
 
 CREATE TABLE main.test (
 	id int4 NULL,
