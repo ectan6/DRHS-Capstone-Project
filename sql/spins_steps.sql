@@ -5,11 +5,12 @@
 -- DROP TABLE main.spins_steps;
 
 CREATE TABLE main.spins_steps (
-	"name" varchar NULL,
-	code varchar NULL,
-	lb float4 NULL,
-	l1 float4 NULL,
-	l2 float4 NULL,
-	l3 float4 NULL,
-	l4 float4 NULL
+	code varchar NOT NULL,
+	"element" varchar NULL,
+	levelb float4 NULL,
+	level1 float4 NULL,
+	level2 float4 NULL,
+	level3 float4 NULL,
+	level4 float4 NULL,
+	CONSTRAINT spins_steps_pk PRIMARY KEY (code)
 );
