@@ -17,7 +17,7 @@ with engine.connect() as conn:
     # result = conn.execute(sql_text)
     # rows = result.fetchall()
     # dataframe!!!
-    df = pd.read_sql("select * from main.test", conn)
+    df = pd.read_sql("select * from main.jumps", conn)
     # print(rows)
 
 st.title("Club Judging System!")
