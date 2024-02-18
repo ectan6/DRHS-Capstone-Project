@@ -36,3 +36,12 @@ st.dataframe(df)
 df.loc[3,:] = [6, "2Lo", 3]
 
 st.dataframe(df)
+
+st.title("jumps")
+col1, col2, col3, col4, col5 = st.columns(5)
+col1.write("toeloop")
+col2.button("1")
+col3.button("2")
+col4.button("3")
+col5.button("4")
+
