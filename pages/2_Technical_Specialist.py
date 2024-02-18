@@ -27,7 +27,12 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 with engine.connect() as conn:
     print("Connection successful")
     # dataframe!!!
-    df = pd.read_sql("select * from main.jumps", conn)
+    df = pd.read_sql("select * from main.test_program", conn)
 
 st.dataframe(df)
 
+# with engine.begin() as connection:
+    
+df.loc[3,:] = [6, "2Lo", 3]
+
+st.dataframe(df)
