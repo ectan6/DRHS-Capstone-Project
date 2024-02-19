@@ -22,48 +22,51 @@ if st.session_state.role not in ["admin", "super-admin"]:
 st.title("tech specialist screen")
 st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
 
-
-# connect to the database and printing connection successful if connected
-with engine.connect() as conn:
-    print("Connection successful")
-    # dataframe!!!
-    df = pd.read_sql("select * from main.test_program", conn)
-
-st.dataframe(df)
-
-if 'clicked' not in st.session_state:
-    st.session_state.clicked = False
-
-def click_button():
-    st.session_state.clicked = True
+# make fnctn w parameters -> one thing to update lots of stuff
+def click_button(program_id: int, element_id: str, counter: int):
+    # connect to the database
+    with engine.connect() as conn:
+        # dataframe!!!
+        old_df = pd.read_sql("select * from main.test_program", conn)
+        old_df.loc[counter, :] = [program_id, element_id, counter]
+        print(old_df)
+        sql_call = old_df.to_sql('main.test_program', engine, if_exists='replace', index=False)
+        print(sql_call)
+        conn.commit()
 
 st.title("jumps")
 col1, col2, col3, col4, col5 = st.columns(5)
-col1.write("toeloop")
-# b1 = st.button("1")
-# b2 = st.button("2")
-# b3 = st.button("3")
-# b4 = st.button("4")
-col2.button("1", on_click=click_button)
-col3.button("2", on_click=click_button)
-col4.button("3", on_click=click_button)
-col5.button("4", on_click=click_button)
 
-st.dataframe(df)
+with col1:
+    st.write("toeloop")
+    # if button clicked inside here instead of session state
+    # ex:
+    if st.button("1"):
+        click_button(8, "2S", 6)
+        # st.dataframe(df)
 
-if st.session_state.clicked:
-    df.loc[4,:] = [7, "3S", 4]
+
+# col1.write("toeloop")
+# col2.button("1", on_click=click_button)
+# col3.button("2", on_click=click_button)
+# col4.button("3", on_click=click_button)
+# col5.button("4", on_click=click_button)
+
+# st.dataframe(df)
+
+# if st.session_state.clicked:
+#     df.loc[4,:] = [7, "3S", 4]
 
     # sql = "INSERT INTO main.test_program(program_id, element_1, counter) VALUES(10, '3F', 4)"
     # with engine.begin() as connection:
     #     connection.execute(sql)
     # st.dataframe(pd.read_sql("select * from main.test_program", engine.connect()))
 
-    df.to_sql('main.test_program', engine, if_exists='replace', index=False)
+    # df.to_sql('main.test_program', engine, if_exists='replace', index=False)
 
-    # printing the dataframe from pandas
-    st.dataframe(df)
+    # # printing the dataframe from pandas
+    # st.dataframe(df)
 
-    #printing to see if the sql changed tho
-    st.dataframe(pd.read_sql("select * from main.test_program", engine.connect()))
-    # spoiler alert: it doesn't :(
+    # #printing to see if the sql changed tho
+    # st.dataframe(pd.read_sql("select * from main.test_program", engine.connect()))
+    # # spoiler alert: it doesn't :(
