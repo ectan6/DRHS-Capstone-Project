@@ -49,19 +49,21 @@ col3.button("2", on_click=click_button)
 col4.button("3", on_click=click_button)
 col5.button("4", on_click=click_button)
 
+st.dataframe(df)
+
 if st.session_state.clicked:
-    # df.loc[4,:] = [7, "3S", 4]
-    sql = "INSERT INTO main.test_program(program_id, element_1, counter) VALUES(10, '3F', 4)"
-    with engine.begin() as connection:
-        connection.execute(sql)
+    df.loc[4,:] = [7, "3S", 4]
+
+    # sql = "INSERT INTO main.test_program(program_id, element_1, counter) VALUES(10, '3F', 4)"
+    # with engine.begin() as connection:
+    #     connection.execute(sql)
+    # st.dataframe(pd.read_sql("select * from main.test_program", engine.connect()))
+
+    df.to_sql('main.test_program', engine, if_exists='replace', index=False)
+
+    # printing the dataframe from pandas
+    st.dataframe(df)
+
+    #printing to see if the sql changed tho
     st.dataframe(pd.read_sql("select * from main.test_program", engine.connect()))
-
-
-# update the table with the new info (using df.loc)
-# df.to_sql('main.test_program', engine, if_exists='replace')
-
-# with engine.connect() as conn:
-#     print("Connection successful")
-#     # dataframe!!!
-#     df = pd.read_sql("select * from main.test_program", conn)
-
+    # spoiler alert: it doesn't :(
