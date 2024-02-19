@@ -33,6 +33,7 @@ def click_button(program_id: int, element_id: str, counter: int):
         sql_call = old_df.to_sql('main.test_program', conn, if_exists='replace', index=False)
         print(sql_call)
         conn.commit()
+        print(old_df)
 
 st.title("jumps")
 col1, col2, col3, col4, col5 = st.columns(5)
