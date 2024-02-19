@@ -31,17 +31,34 @@ with engine.connect() as conn:
 
 st.dataframe(df)
 
-# with engine.begin() as connection:
-    
-df.loc[3,:] = [6, "2Lo", 3]
+if 'clicked' not in st.session_state:
+    st.session_state.clicked = False
 
-st.dataframe(df)
+def click_button():
+    st.session_state.clicked = True
 
 st.title("jumps")
 col1, col2, col3, col4, col5 = st.columns(5)
 col1.write("toeloop")
-col2.button("1")
-col3.button("2")
-col4.button("3")
-col5.button("4")
+# b1 = st.button("1")
+# b2 = st.button("2")
+# b3 = st.button("3")
+# b4 = st.button("4")
+col2.button("1", on_click=click_button)
+col3.button("2", on_click=click_button)
+col4.button("3", on_click=click_button)
+col5.button("4", on_click=click_button)
+
+if st.session_state.clicked:
+    df.loc[4,:] = [7, "3S", 4]
+
+st.dataframe(df)
+
+# update the table with the new info
+df.to_sql('main.test_program', engine, if_exists='replace')
+
+# with engine.connect() as conn:
+#     print("Connection successful")
+#     # dataframe!!!
+#     df = pd.read_sql("select * from main.test_program", conn)
 
