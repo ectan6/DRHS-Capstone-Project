@@ -30,7 +30,7 @@ def click_button(program_id: int, element_id: str, counter: int):
         old_df = pd.read_sql("select * from main.test_program", conn)
         old_df.loc[counter, :] = [program_id, element_id, counter]
         print(old_df)
-        sql_call = old_df.to_sql('main.test_program', conn, if_exists='replace', index=False)
+        sql_call = old_df.to_sql(name='test_program', schema='main', con=conn, if_exists='replace', index=False)
         print(sql_call)
         conn.commit()
         print(old_df)
