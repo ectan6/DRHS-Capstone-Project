@@ -40,34 +40,22 @@ col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
     st.write("toeloop")
+
+with col2:
     # if button clicked inside here instead of session state
     # ex:
     if st.button("1"):
         click_button(8, "2S", 6)
         # st.dataframe(df)
 
+with col3:
+    if st.button("2"):
+        click_button(15, "1T", 7)
 
-# col1.write("toeloop")
-# col2.button("1", on_click=click_button)
-# col3.button("2", on_click=click_button)
-# col4.button("3", on_click=click_button)
-# col5.button("4", on_click=click_button)
+with col4:
+    if st.button("3"):
+        click_button(44, "1T", 8)
 
-# st.dataframe(df)
-
-# if st.session_state.clicked:
-#     df.loc[4,:] = [7, "3S", 4]
-
-    # sql = "INSERT INTO main.test_program(program_id, element_1, counter) VALUES(10, '3F', 4)"
-    # with engine.begin() as connection:
-    #     connection.execute(sql)
-    # st.dataframe(pd.read_sql("select * from main.test_program", engine.connect()))
-
-    # df.to_sql('main.test_program', engine, if_exists='replace', index=False)
-
-    # # printing the dataframe from pandas
-    # st.dataframe(df)
-
-    # #printing to see if the sql changed tho
-    # st.dataframe(pd.read_sql("select * from main.test_program", engine.connect()))
-    # # spoiler alert: it doesn't :(
+with col5:
+    if st.button("4"):
+        click_button(55, "1T", 9)
