@@ -35,15 +35,17 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 #         conn.commit()
 #         print(old_df)
 
-def click_button(program_id: int, user_id: int, competition_id: int, jump_id: str, spin_id: str, order_executed: int):
+
+
+def click_button(score_id: int, jump_id: str, spin_id: str, order_executed: int):
     # connect to the database
     with engine.connect() as conn:
         # dataframe!!!
-        old_df = pd.read_sql("select * from main.programs", conn)
+        old_df = pd.read_sql("select * from main.score", conn)
         # calculate score
-        old_df.loc[order_executed, :] = [1, jump_id, spin_id, order_executed]
+        old_df.loc[1, :] = [score_id, jump_id, spin_id, order_executed]
         print(old_df)
-        sql_call = old_df.to_sql(name='programs', schema='main', con=conn, if_exists='replace', index=False)
+        sql_call = old_df.to_sql(name='score', schema='main', con=conn, if_exists='replace', index=False)
         print(sql_call)
         conn.commit()
         print(old_df)
@@ -58,7 +60,7 @@ with col2:
     # if button clicked inside here instead of session state
     # ex:
     if st.button("1"):
-        click_button(1, 2, 3, "1T", "CCoSp", 1)
+        click_button(1, "1T", "", 1)
         # st.dataframe(df)
 
 # with col3:
