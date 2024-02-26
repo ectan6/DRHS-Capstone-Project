@@ -23,18 +23,26 @@ st.title("tech specialist screen")
 st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
 
 # make fnctn w parameters -> one thing to update lots of stuff
-def click_button(score_id: int, jump_id: str, spin_id: str, order_executed: int):
+def click_button(jump_id: str, spin_id: str, order_executed: int):
     # connect to the database
     with engine.connect() as conn:
-        # dataframe!!!
-        old_df = pd.read_sql("select * from main.score", conn)
-        d = {"score_id": [score_id], "jump_id": [jump_id], "spin_id": [spin_id], "order_executed": [order_executed]}
-        temp_df = pd.DataFrame(data=d)   
-        new_df = pd.concat([old_df, temp_df])
-        print(new_df)
-        sql_call = new_df.to_sql(name='score', schema='main', con=conn, if_exists='replace', index=False)
-        print(sql_call)
+        # old_df = pd.read_sql("select * from main.score", conn)
+        # cursor = conn.cursor()
+
+        sql = "INSERT INTO score(jump_id) VALUES('3F')"
+        conn.execute(sql)
         conn.commit()
+        st.dataframe(pd.read_sql("select * from main.score", conn))
+
+        # with engine.connect() as conn:
+        #     # construct the SQL query
+        #     query = f"INSERT INTO main.test_program(program_id, element_1, counter) VALUES({program_id}, '{element_id}', {counter})"
+        #     # execute the query
+        #     conn.execute(query)
+
+        # sql_call = new_df.to_sql(name='score', schema='main', con=conn, if_exists='replace', index=False)
+        # print(sql_call)
+        
 
 
 st.title("jumps")
@@ -56,19 +64,19 @@ with col2:
     # if button clicked inside here instead of session state
     # ex:
     if st.button("1"):
-        click_button(2, "1T", "", 2)
+        click_button("1T", "", 2)
 
 with col3:
     if st.button("2"):
-        click_button(15, "1T","", 7)
+        click_button("1T","", 7)
 
 with col4:
     if st.button("3"):
-        click_button(44, "1T", "", 8)
+        click_button("1T", "", 8)
 
 with col5:
     if st.button("4"):
-        click_button(55, "1T", "", 9)
+        click_button("1T", "", 9)
 
 with col6:
     completed_elements = pd.DataFrame(
