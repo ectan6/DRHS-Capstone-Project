@@ -38,7 +38,16 @@ def click_button(score_id: int, jump_id: str, spin_id: str, order_executed: int)
 
 
 st.title("jumps")
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3, col4, col5, col6 = st.columns(6)
+# widths in px
+column_widths = [125, 100, 100, 100, 100, 300]
+# trying to make the columns with the buttons skinnier...
+column_styling = [
+    f"max-width: {width}px;"
+    for width in column_widths
+]
+column_styling = ";".join(column_styling)
+st.markdown(f"<style>.reportview-container .main .block-container{{flex: 1;}} .column-widget.stHorizontal{{{column_styling}}}</style>", unsafe_allow_html=True)
 
 with col1:
     st.write("toeloop")
@@ -61,10 +70,10 @@ with col5:
     if st.button("4"):
         click_button(55, "1T", "", 9)
 
-# with col6:
-#     df_completed_elements = pd.DataFrame(
-#         {
-#             "element": "Element"
-#         }
-#     )
-#     st.dataframe(df_completed_elements)
+with col6:
+    completed_elements = pd.DataFrame(
+        {
+            "element": ["Element"]
+        }
+    )
+    st.dataframe(completed_elements)
