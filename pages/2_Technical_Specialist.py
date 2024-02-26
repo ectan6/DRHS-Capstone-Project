@@ -26,23 +26,10 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 def click_button(jump_id: str, spin_id: str, order_executed: int):
     # connect to the database
     with engine.connect() as conn:
-        # old_df = pd.read_sql("select * from main.score", conn)
-        # cursor = conn.cursor()
-
-        sql = "INSERT INTO score(jump_id) VALUES('3F')"
-        conn.execute(sql)
+        sql = "INSERT INTO main.score(jump_id) VALUES('3F')"
+        conn.execute(text(sql))
         conn.commit()
-        st.dataframe(pd.read_sql("select * from main.score", conn))
-
-        # with engine.connect() as conn:
-        #     # construct the SQL query
-        #     query = f"INSERT INTO main.test_program(program_id, element_1, counter) VALUES({program_id}, '{element_id}', {counter})"
-        #     # execute the query
-        #     conn.execute(query)
-
-        # sql_call = new_df.to_sql(name='score', schema='main', con=conn, if_exists='replace', index=False)
-        # print(sql_call)
-        
+        st.dataframe(pd.read_sql("select * from main.score", conn))        
 
 
 st.title("jumps")
