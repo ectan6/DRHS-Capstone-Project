@@ -28,12 +28,14 @@ def click_button(score_id: int, jump_id: str, spin_id: str, order_executed: int)
     with engine.connect() as conn:
         # dataframe!!!
         old_df = pd.read_sql("select * from main.score", conn)
-        old_df.loc[len(old_df.index)] = [score_id, jump_id, spin_id, order_executed]
-        print(old_df)
-        sql_call = old_df.to_sql(name='score', schema='main', con=conn, if_exists='replace', index=False)
+        d = {"score_id": [score_id], "jump_id": [jump_id], "spin_id": [spin_id], "order_executed": [order_executed]}
+        temp_df = pd.DataFrame(data=d)   
+        new_df = pd.concat([old_df, temp_df])
+        print(new_df)
+        sql_call = new_df.to_sql(name='score', schema='main', con=conn, if_exists='replace', index=False)
         print(sql_call)
         conn.commit()
-        print(old_df)
+
 
 st.title("jumps")
 col1, col2, col3, col4, col5 = st.columns(5)
