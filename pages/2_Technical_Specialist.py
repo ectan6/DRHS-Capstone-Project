@@ -33,7 +33,8 @@ def click_button(jump_id: str, spin_id: str, order_executed: int):
 
 
 st.title("jumps")
-col1, col2, col3, col4, col5, col6 = st.columns(6)
+# 3 big columns and then nest columns for jumps and spins
+col1, col2, col3 = st.columns(3)
 # widths in px
 column_widths = [125, 100, 100, 100, 100, 300]
 # trying to make the columns with the buttons skinnier...
@@ -45,6 +46,7 @@ column_styling = ";".join(column_styling)
 st.markdown(f"<style>.reportview-container .main .block-container{{flex: 1;}} .column-widget.stHorizontal{{{column_styling}}}</style>", unsafe_allow_html=True)
 
 with col1:
+    # nest jump columns in here
     st.write("toeloop")
 
 with col2:
