@@ -32,45 +32,39 @@ def click_button(jump_id: str, spin_id: str, order_executed: int):
         st.dataframe(pd.read_sql("select * from main.score", conn))        
 
 
-st.title("jumps")
 # 3 big columns and then nest columns for jumps and spins
 col1, col2, col3 = st.columns(3)
-# widths in px
-column_widths = [125, 100, 100, 100, 100, 300]
-# trying to make the columns with the buttons skinnier...
-column_styling = [
-    f"max-width: {width}px;"
-    for width in column_widths
-]
-column_styling = ";".join(column_styling)
-st.markdown(f"<style>.reportview-container .main .block-container{{flex: 1;}} .column-widget.stHorizontal{{{column_styling}}}</style>", unsafe_allow_html=True)
 
 with col1:
     # nest jump columns in here
-    st.write("toeloop")
+    st.write("jumps")
+    c1, c2, c3, c4, c5 = st.columns(5)
+    with c1:
+        st.write("toeloop")
+    with c2:
+        if st.button("1"):
+            click_button("1T", "", 2)
+    with c3: 
+        if st.button("2"):
+            click_button("1T","", 7)
+    with c4:
+        if st.button("3"):
+            click_button("1T", "", 8)
+    with c5:
+        if st.button("4"):
+            click_button("1T", "", 9)
+
 
 with col2:
-    # if button clicked inside here instead of session state
-    # ex:
-    if st.button("1"):
-        click_button("1T", "", 2)
-
-with col3:
-    if st.button("2"):
-        click_button("1T","", 7)
-
-with col4:
-    if st.button("3"):
-        click_button("1T", "", 8)
-
-with col5:
-    if st.button("4"):
-        click_button("1T", "", 9)
-
-with col6:
+    st.write("completed elements table")
+    # probably going to get rid of this dataframe??? and use the sql commands to pull the elements from the score table
     completed_elements = pd.DataFrame(
         {
             "element": ["Element"]
         }
     )
     st.dataframe(completed_elements)
+    
+
+with col3:
+    st.write("spins and steps")
