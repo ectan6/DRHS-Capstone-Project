@@ -38,7 +38,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     # nest jump columns in here
     st.write("jumps")
-    c1, c2, c3, c4, c5 = st.columns(5)
+    c1, c2, c3, c4, c5 = st.columns(spec=[0.32, 0.17, 0.17, 0.17, 0.17])
     with c1:
         st.write("Toeloop")
         st.write("Salchow")
@@ -116,3 +116,14 @@ with col2:
 
 with col3:
     st.write("spins and steps")
+    c6, c7, c8, c9, c10 = st.columns(5)
+    with c6:
+        st.write("upright")
+    # with c7:
+        
+    # with c8: 
+        
+    # with c9:
+       
+    # with c10:
+        
