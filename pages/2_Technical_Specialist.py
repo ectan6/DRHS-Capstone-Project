@@ -26,7 +26,7 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 def click_button(jump_id: str, spin_id: str, order_executed: int):
     # connect to the database
     with engine.connect() as conn:
-        sql = f"INSERT INTO main.score(jump_id) VALUES('{jump_id}')"
+        sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed) VALUES('{jump_id}', '{spin_id}', '{order_executed}')"
         conn.execute(text(sql))
         conn.commit()
         # st.dataframe(pd.read_sql("select * from main.score", conn))        
@@ -118,12 +118,68 @@ with col3:
     st.write("spins and steps")
     c6, c7, c8, c9, c10 = st.columns(5)
     with c6:
-        st.write("upright")
-    # with c7:
-        
-    # with c8: 
-        
-    # with c9:
-       
+        st.write("Upright")
+        st.write("Layback")
+        st.write("Camel")
+        st.write("Sit")
+        st.write("Combo")
+    with c7:
+        if st.button(label="✓", key="us"):
+            click_button("", "USp", 1)
+        if st.button(label="✓", key="ls"):
+            click_button("", "LSp", 1)
+        if st.button(label="✓", key="cs"):
+            click_button("", "CSp", 1)
+        if st.button(label="✓", key="ss"):
+            click_button("", "SSp", 1)
+        if st.button(label="✓", key="cos"):
+            click_button("", "CoSp", 1)
+    with c8: 
+        if st.button(label="F", key="fus"):
+            click_button("", "FUSp", 1)
+        if st.button(label="F", key="fls"):
+            click_button("", "FLSp", 1)
+        if st.button(label="F", key="fcs"):
+            click_button("", "FCSp", 1)
+        if st.button(label="F", key="fss"):
+            click_button("", "FSSp", 1)
+        if st.button(label="F", key="fcos"):
+            click_button("", "FCoSp", 1)
+    with c9:
+        if st.button(label="C", key="cus"):
+            click_button("", "CUSp", 1)
+        if st.button(label="C", key="cls"):
+            click_button("", "CLSp", 1)
+        if st.button(label="C", key="ccs"):
+            click_button("", "CCSp", 1)
+        if st.button(label="C", key="css"):
+            click_button("", "CSSp", 1)
+        if st.button(label="C", key="ccos"):
+            click_button("", "CCoSp", 1)
+    # need to have spin level
     # with c10:
+    
+    # -------------
+    st.write("")
+    st.write("sequences")
+    c11, c12, c13, c14, c15 = st.columns(5)
+    with c11:
+        st.write("step")
+        st.write("choreo")
+    with c12:
+        if st.button(label="1", key="1step"):
+            click_button("", "StSq", 1)
+        if st.button(label="✓", key="choreo"):
+            click_button("", "ChSq", 1)
+
+    with c13:
+        if st.button(label="2", key="2step"):
+            click_button("", "StSq", 1)
+    with c14:
+        if st.button(label="3", key="3step"):
+            click_button("", "StSq", 1)
+    with c15:
+        if st.button(label="4", key="4step"):
+            click_button("", "StSq", 1)
         
+
