@@ -11,13 +11,8 @@ database_name = "postgres"
 postgres_password = os.getenv("POSTGRES_PASSWORD")
 engine = create_engine(f"postgresql+psycopg2://postgres:{postgres_password}@localhost:5432/{database_name}")
 
-# global spin_id
-# spin_id = ""
 
-# Redirect to app.py if not logged in, otherwise show the navigation menu
 menu_with_redirect()
-
-# Verify the user's role
 if st.session_state.role not in ["admin", "super-admin"]:
     st.warning("You do not have permission to view this page.")
     st.stop()
@@ -25,7 +20,7 @@ if st.session_state.role not in ["admin", "super-admin"]:
 st.title("tech specialist screen")
 st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
 
-# make fnctn w parameters -> one thing to update lots of stuff
+# function for adding elements to the score table in the database
 def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: int):
     # connect to the database
     with engine.connect() as conn:
@@ -38,6 +33,7 @@ def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: in
 # 3 big columns and then nest columns for jumps and spins
 col1, col2, col3 = st.columns(3)
 
+# jumps column
 with col1:
     # nest jump columns in here
     st.write("jumps")
@@ -105,7 +101,7 @@ with col1:
         if st.button(label="4", key="4axel"):
             click_button("4A", "", 2)
 
-
+# completed elements table
 with col2:
     st.write("completed elements table")
     # probably going to get rid of this dataframe??? and use the sql commands to pull the elements from the score table
@@ -120,7 +116,6 @@ with col2:
 modal = Modal(
     "Demo Modal", 
     key="demo-modal",
-    
     # Optional
     padding=20,    # default value
     max_width=744  # default value
@@ -131,17 +126,12 @@ if modal.is_open():
         # set variable on button click and close the modal
         spin_id = st.session_state['spin_id'] 
         if st.button("1", key="spin_level_1"):
-            # SPIN_LEVEL =1
-            # print("modal print") 
-            # print(st.session_state['spin_id'] )
             click_button("", spin_id, 1, 1)     
             modal.close()
-    print("with print")
-print("outside")
         
-
+# spins and steps column
 with col3:
-    st.write("spins and steps")
+    st.write("spins")
     c6, c7, c8, c9, c10 = st.columns(5)
     with c6:
         st.write("Upright")
