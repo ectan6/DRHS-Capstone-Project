@@ -1,6 +1,7 @@
 import streamlit as st
 from menu import menu
 
+
 if "role" not in st.session_state:
     st.session_state.role = None
 
@@ -18,3 +19,4 @@ st.selectbox(
 )
 
 menu() # render dynamic menu
+

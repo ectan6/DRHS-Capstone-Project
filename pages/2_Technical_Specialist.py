@@ -5,11 +5,14 @@ from dotenv import load_dotenv
 load_dotenv()
 import os 
 import pandas as pd
+from streamlit_modal import Modal
 
 database_name = "postgres"
 postgres_password = os.getenv("POSTGRES_PASSWORD")
 engine = create_engine(f"postgresql+psycopg2://postgres:{postgres_password}@localhost:5432/{database_name}")
 
+# global spin_id
+# spin_id = ""
 
 # Redirect to app.py if not logged in, otherwise show the navigation menu
 menu_with_redirect()
@@ -23,10 +26,10 @@ st.title("tech specialist screen")
 st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
 
 # make fnctn w parameters -> one thing to update lots of stuff
-def click_button(jump_id: str, spin_id: str, order_executed: int):
+def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: int):
     # connect to the database
     with engine.connect() as conn:
-        sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed) VALUES('{jump_id}', '{spin_id}', '{order_executed}')"
+        sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
         conn.execute(text(sql))
         conn.commit()
         # st.dataframe(pd.read_sql("select * from main.score", conn))        
@@ -112,7 +115,30 @@ with col2:
         }
     )
     st.dataframe(completed_elements)
+
+
+modal = Modal(
+    "Demo Modal", 
+    key="demo-modal",
     
+    # Optional
+    padding=20,    # default value
+    max_width=744  # default value
+)
+if modal.is_open():
+    with modal.container():
+        # 4 buttons here
+        # set variable on button click and close the modal
+        spin_id = st.session_state['spin_id'] 
+        if st.button("1", key="spin_level_1"):
+            # SPIN_LEVEL =1
+            # print("modal print") 
+            # print(st.session_state['spin_id'] )
+            click_button("", spin_id, 1, 1)     
+            modal.close()
+    print("with print")
+print("outside")
+        
 
 with col3:
     st.write("spins and steps")
@@ -125,7 +151,10 @@ with col3:
         st.write("Combo")
     with c7:
         if st.button(label="✓", key="us"):
-            click_button("", "USp", 1)
+            # global spin_id
+            st.session_state['spin_id'] = "USp"
+            # spin_id = "USp"
+            modal.open()
         if st.button(label="✓", key="ls"):
             click_button("", "LSp", 1)
         if st.button(label="✓", key="cs"):
