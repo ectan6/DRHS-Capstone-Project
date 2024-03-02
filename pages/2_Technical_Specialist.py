@@ -29,6 +29,9 @@ def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: in
         conn.commit()
         # st.dataframe(pd.read_sql("select * from main.score", conn))        
 
+# testing out if the buttons always display one after the other (i want them to be in a row...)
+st.button("test1")
+st.button("test2")
 
 # 3 big columns and then nest columns for jumps and spins
 col1, col2, col3 = st.columns(3)
@@ -114,15 +117,14 @@ with col2:
 
 
 modal = Modal(
-    "Demo Modal", 
-    key="demo-modal",
+    "Spin Level", 
+    key="spin_level_modal",
     # Optional
-    padding=20,    # default value
-    max_width=744  # default value
+    padding=20,
+    max_width=744
 )
 if modal.is_open():
     with modal.container():
-        # 4 buttons here
         # insert id and level (from buttons) and close the modal
         spin_id = st.session_state['spin_id'] 
         if st.button("0", key="spin_level_0"):
