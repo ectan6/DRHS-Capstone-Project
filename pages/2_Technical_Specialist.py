@@ -123,16 +123,28 @@ modal = Modal(
 if modal.is_open():
     with modal.container():
         # 4 buttons here
-        # set variable on button click and close the modal
+        # insert id and level (from buttons) and close the modal
         spin_id = st.session_state['spin_id'] 
+        if st.button("0", key="spin_level_0"):
+            click_button("", spin_id, 1, 0)     
+            modal.close()
         if st.button("1", key="spin_level_1"):
             click_button("", spin_id, 1, 1)     
+            modal.close()
+        if st.button("2", key="spin_level_2"):
+            click_button("", spin_id, 1, 2)     
+            modal.close()
+        if st.button("3", key="spin_level_3"):
+            click_button("", spin_id, 1, 3)     
+            modal.close()
+        if st.button("4", key="spin_level_4"):
+            click_button("", spin_id, 1, 4)     
             modal.close()
         
 # spins and steps column
 with col3:
     st.write("spins")
-    c6, c7, c8, c9, c10 = st.columns(5)
+    c6, c7, c8, c9 = st.columns(4)
     with c6:
         st.write("Upright")
         st.write("Layback")
@@ -141,44 +153,55 @@ with col3:
         st.write("Combo")
     with c7:
         if st.button(label="✓", key="us"):
-            # global spin_id
             st.session_state['spin_id'] = "USp"
-            # spin_id = "USp"
             modal.open()
         if st.button(label="✓", key="ls"):
-            click_button("", "LSp", 1)
+            st.session_state['spin_id'] = "LSp"
+            modal.open()
         if st.button(label="✓", key="cs"):
-            click_button("", "CSp", 1)
+            st.session_state['spin_id'] = "CSp"
+            modal.open()
         if st.button(label="✓", key="ss"):
-            click_button("", "SSp", 1)
+            st.session_state['spin_id'] = "SSp"
+            modal.open()
         if st.button(label="✓", key="cos"):
-            click_button("", "CoSp", 1)
+            st.session_state['spin_id'] = "CoSp"
+            modal.open()
     with c8: 
         if st.button(label="F", key="fus"):
-            click_button("", "FUSp", 1)
+            st.session_state['spin_id'] = "FUSp"
+            modal.open()
         if st.button(label="F", key="fls"):
-            click_button("", "FLSp", 1)
+            st.session_state['spin_id'] = "FLSp"
+            modal.open()
         if st.button(label="F", key="fcs"):
-            click_button("", "FCSp", 1)
+            st.session_state['spin_id'] = "FCSp"
+            modal.open()
         if st.button(label="F", key="fss"):
-            click_button("", "FSSp", 1)
+            st.session_state['spin_id'] = "FSSp"
+            modal.open()
         if st.button(label="F", key="fcos"):
-            click_button("", "FCoSp", 1)
+            st.session_state['spin_id'] = "FCoSp"
+            modal.open()
     with c9:
         if st.button(label="C", key="cus"):
-            click_button("", "CUSp", 1)
+            st.session_state['spin_id'] = "CUSp"
+            modal.open()
         if st.button(label="C", key="cls"):
-            click_button("", "CLSp", 1)
+            st.session_state['spin_id'] = "CLSp"
+            modal.open()
         if st.button(label="C", key="ccs"):
-            click_button("", "CCSp", 1)
+            st.session_state['spin_id'] = "CCSp"
+            modal.open()
         if st.button(label="C", key="css"):
-            click_button("", "CSSp", 1)
+            st.session_state['spin_id'] = "CSSp"
+            modal.open()
         if st.button(label="C", key="ccos"):
-            click_button("", "CCoSp", 1)
-    # need to have spin level
-    # with c10:
+            st.session_state['spin_id'] = "CCoSp"
+            modal.open()
     
     # -------------
+            
     st.write("")
     st.write("sequences")
     c11, c12, c13, c14, c15 = st.columns(5)
