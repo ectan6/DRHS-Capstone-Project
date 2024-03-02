@@ -1,13 +1,39 @@
 import streamlit as st
 from menu import menu_with_redirect
 
-# Redirect to app.py if not logged in, otherwise show the navigation menu
 menu_with_redirect()
 
-# Verify the user's role
 if st.session_state.role not in ["admin", "super-admin"]:
     st.warning("You do not have permission to view this page.")
     st.stop()
 
-st.title("This page is available to all admins")
 st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
+st.title("judge screen")
+
+c1, c2 = st.columns(2)
+with c1:
+    st.write("Completed Program Elements")
+    # put table here - same as the one on the technical specialist page
+with c2:
+    st.write("Grade of Execution")
+    # buttons should line up with the rows on the completed program elements table
+
+st.divider()
+
+# label, min, max, default, step
+skating_skills = st.slider('skating skills', 0.0, 10.0, 5.0, 0.25)
+st.write("you chose", skating_skills, 'for skating skills')
+
+transitions = st.slider('transitions', 0.0, 10.0, 5.0, 0.25)
+st.write("you chose", transitions, 'for skating skills')
+
+performance = st.slider('performance', 0.0, 10.0, 5.0, 0.25)
+st.write("you chose", performance, 'for skating skills')
+
+choreography = st.slider('choreography', 0.0, 10.0, 5.0, 0.25)
+st.write("you chose", choreography, 'for skating skills')
+
+interpretation = st.slider('interpretation', 0.0, 10.0, 5.0, 0.25)
+st.write("you chose", interpretation, 'for skating skills')
+
+st.button("submit")

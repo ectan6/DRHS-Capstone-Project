@@ -8,7 +8,7 @@ def authenticated_menu():
     st.sidebar.page_link("pages/1_Planned_Program_Components.py", label="Planned Program Components")
     if st.session_state.role in ["admin", "super-admin"]:
         st.sidebar.page_link("pages/2_Technical_Specialist.py", label="Tech Specialist")
-        st.sidebar.page_link("pages/3_Judge.py", label="juding")
+        st.sidebar.page_link("pages/3_Judge.py", label="Judge")
         st.sidebar.page_link(
             "pages/super-admin.py",
             label="Manage admin access",

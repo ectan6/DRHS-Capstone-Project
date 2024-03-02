@@ -227,3 +227,4 @@ with col3:
             click_button("", "StSq", 1)
         
 
+st.button("submit")
