@@ -10,6 +10,13 @@ st.session_state._role = st.session_state.role
 def set_role():
     st.session_state.role = st.session_state._role
 
+c1, c2 = st.columns(2)
+with c1:
+    st.title("Club Judging System")
+with c2:
+    # st.image(r"...\DRHS-Capstone-Project\logo.png")
+    st.image("logo.png", width=280)
+
 # selectbox to choose role
 st.selectbox(
     "Select your role:",

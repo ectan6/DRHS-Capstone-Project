@@ -25,15 +25,15 @@ skating_skills = st.slider('skating skills', 0.0, 10.0, 5.0, 0.25)
 st.write("you chose", skating_skills, 'for skating skills')
 
 transitions = st.slider('transitions', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", transitions, 'for skating skills')
+st.write("you chose", transitions, 'for transitions')
 
 performance = st.slider('performance', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", performance, 'for skating skills')
+st.write("you chose", performance, 'for performance')
 
 choreography = st.slider('choreography', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", choreography, 'for skating skills')
+st.write("you chose", choreography, 'for choreography')
 
 interpretation = st.slider('interpretation', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", interpretation, 'for skating skills')
+st.write("you chose", interpretation, 'for interpretation')
 
 st.button("submit")
