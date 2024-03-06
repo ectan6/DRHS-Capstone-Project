@@ -29,12 +29,9 @@ def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: in
         conn.commit()
         # st.dataframe(pd.read_sql("select * from main.score", conn))        
 
-# testing out if the buttons always display one after the other (i want them to be in a row...)
-st.button("test1")
-st.button("test2")
 
 # 3 big columns and then nest columns for jumps and spins
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 # jumps column
 with col1:
@@ -104,17 +101,6 @@ with col1:
         if st.button(label="4", key="4axel"):
             click_button("4A", "", 2)
 
-# completed elements table
-with col2:
-    st.write("completed elements table")
-    # probably going to get rid of this dataframe??? and use the sql commands to pull the elements from the score table
-    completed_elements = pd.DataFrame(
-        {
-            "element": ["Element"]
-        }
-    )
-    st.dataframe(completed_elements)
-
 
 modal = Modal(
     "Spin Level", 
@@ -143,8 +129,9 @@ if modal.is_open():
             click_button("", spin_id, 1, 4)     
             modal.close()
         
+
 # spins and steps column
-with col3:
+with col2:
     st.write("spins")
     c6, c7, c8, c9 = st.columns(4)
     with c6:
@@ -226,5 +213,20 @@ with col3:
         if st.button(label="4", key="4step"):
             click_button("", "StSq", 1)
         
+
+# completed elements table
+st.write("completed elements table")
+selected_element = st.selectbox(
+    "select an element number",
+    ([i for i in range(1, 8)])
+)
+completed_elements = pd.DataFrame(
+    {
+        "element number": "1",
+    },
+    hide_index=True
+)
+st.dataframe(completed_elements)
+
 
 st.button("submit")
