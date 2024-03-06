@@ -220,13 +220,14 @@ selected_element = st.selectbox(
     "select an element number",
     ([i for i in range(1, 8)])
 )
-completed_elements = pd.DataFrame(
-    {
-        "element number": "1",
-    },
-    hide_index=True
-)
-st.dataframe(completed_elements)
+
+base_data = {
+    "Execution Order": [1, 2, 3, 4, 5, 6, 7],
+    "Element": ["", "", "", "", "", "", ""]
+}
+
+completed_elements = pd.DataFrame(base_data, columns=["Execution Order", "Element"])
+st.dataframe(completed_elements, hide_index=True)
 
 
 st.button("submit")
