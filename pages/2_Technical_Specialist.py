@@ -27,16 +27,22 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 
 
 # function for adding elements to the score table in the database
-def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: int = 0):
+def click_button(jump_id: str, spin_id: str, spin_level: int):
 
     if jump_id:
         st.session_state.completed_elements.loc[
             st.session_state.selected_element - 1, "element_list"
         ].append(jump_id)
     if spin_id:
-        st.session_state.completed_elements.loc[
-            st.session_state.selected_element - 1, "element_list"
-        ].append(spin_id + str(spin_level))
+        if (spin_level == 0):
+            st.session_state.completed_elements.loc[
+                st.session_state.selected_element - 1, "element_list"
+            ].append(spin_id + 'B')
+        else:
+            st.session_state.completed_elements.loc[
+                st.session_state.selected_element - 1, "element_list"
+            ].append(spin_id + str(spin_level))
+    
 
     # connect to the database
     # with engine.connect() as conn:
@@ -132,20 +138,20 @@ if modal.is_open():
         # Always set modal_selected_element to selected_element
         st.session_state.modal_selected_element = st.session_state.selected_element
 
-        if st.button("0", key="spin_level_0"):
-            click_button("", spin_id, 1, 0)
+        if st.button("B", key="spin_level_0"):
+            click_button("", spin_id, 0)
             modal.close()
         if st.button("1", key="spin_level_1"):
-            click_button("", spin_id, 1, 1)
+            click_button("", spin_id, 1)
             modal.close()
         if st.button("2", key="spin_level_2"):
-            click_button("", spin_id, 1, 2)
+            click_button("", spin_id, 2)
             modal.close()
         if st.button("3", key="spin_level_3"):
-            click_button("", spin_id, 1, 3)
+            click_button("", spin_id, 3)
             modal.close()
         if st.button("4", key="spin_level_4"):
-            click_button("", spin_id, 1, 4)
+            click_button("", spin_id, 4)
             modal.close()
 
 
@@ -212,25 +218,28 @@ with col2:
 
     st.write("")
     st.write("sequences")
-    c11, c12, c13, c14, c15 = st.columns(5)
+    c11, c12, c13, c14, c15, c16 = st.columns(6)
     with c11:
         st.write("step")
         st.write("choreo")
     with c12:
-        if st.button(label="1", key="1step"):
-            click_button("", "StSq", 1)
+        if st.button(label="B", key="0step"):
+            click_button("", "StSq", 0)
         if st.button(label="✓", key="choreo"):
             click_button("", "ChSq", 1)
-
     with c13:
-        if st.button(label="2", key="2step"):
+        if st.button(label="1", key="1step"):
             click_button("", "StSq", 1)
+
     with c14:
-        if st.button(label="3", key="3step"):
-            click_button("", "StSq", 1)
+        if st.button(label="2", key="2step"):
+            click_button("", "StSq", 2)
     with c15:
+        if st.button(label="3", key="3step"):
+            click_button("", "StSq", 3)
+    with c16:
         if st.button(label="4", key="4step"):
-            click_button("", "StSq", 1)
+            click_button("", "StSq", 4)
 
 
 # completed elements table
@@ -266,7 +275,7 @@ if st.session_state.selected_element < MAX_ELEMENTS:
 
 base_data = {
     "execution_order": [i for i in range(1, MAX_ELEMENTS + 1)],
-    "element_list": [["3s", "1Eu", "1F"], [], [], [], [], [], []],
+    "element_list": [[], [], [], [], [], [], []],
     "element_string": ["", "", "", "", "", "", ""],
 }
 
