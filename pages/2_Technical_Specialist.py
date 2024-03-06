@@ -25,14 +25,23 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 
 
 # function for adding elements to the score table in the database
-def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: int):
+def click_button(jump_id: str, spin_id: str, order_executed: int, spin_level: int = 0):
+
+    if jump_id:
+        st.session_state.completed_elements.loc[
+            st.session_state.selected_element - 1, "element_list"
+        ].append(jump_id)
+    if spin_id:
+        st.session_state.completed_elements.loc[
+            st.session_state.selected_element - 1, "element_list"
+        ].append(spin_id + str(spin_level))
 
     # connect to the database
-    with engine.connect() as conn:
-        sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
-        conn.execute(text(sql))
-        conn.commit()
-        # st.dataframe(pd.read_sql("select * from main.score", conn))
+    # with engine.connect() as conn:
+    #     sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
+    #     conn.execute(text(sql))
+    #     conn.commit()
+    # st.dataframe(pd.read_sql("select * from main.score", conn))
 
 
 # 3 big columns and then nest columns for jumps and spins
@@ -118,6 +127,9 @@ if modal.is_open():
     with modal.container():
         # insert id and level (from buttons) and close the modal
         spin_id = st.session_state["spin_id"]
+        # Always set modal_selected_element to selected_element
+        st.session_state.modal_selected_element = st.session_state.selected_element
+
         if st.button("0", key="spin_level_0"):
             click_button("", spin_id, 1, 0)
             modal.close()
@@ -221,11 +233,23 @@ with col2:
 
 # completed elements table
 st.write("completed elements table")
-selected_element = st.selectbox("select an element number", ([i for i in range(1, 8)]))
 
+if "modal_selected_element" in st.session_state:
+    selected_element = st.selectbox(
+        "select an element number",
+        ([i for i in range(1, 8)]),
+        index=st.session_state.modal_selected_element - 1,
+    )
+else:
+    selected_element = st.selectbox(
+        "select an element number", ([i for i in range(1, 8)])
+    )
 # If selected element is not in state, add it
-if selected_element not in st.session_state:
-    st.session_state[selected_element] = selected_element
+if "selected_element" not in st.session_state:
+    st.session_state.selected_element = selected_element
+else:
+    # If selected element is not the same as the one in state, update it
+    st.session_state.selected_element = selected_element
 
 base_data = {
     "execution_order": [1, 2, 3, 4, 5, 6, 7],
@@ -246,7 +270,9 @@ element_column = st.session_state.completed_elements["element_list"][
 element_string = "+".join(str(element) for element in element_column)
 
 # Update the dataframe with the new element
-st.session_state.completed_elements.loc[selected_element - 1, "element_string"] = element_string
+st.session_state.completed_elements.loc[selected_element - 1, "element_string"] = (
+    element_string
+)
 st.dataframe(
     st.session_state.completed_elements,
     hide_index=True,
