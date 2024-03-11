@@ -307,4 +307,20 @@ st.dataframe(
 )
 
 
-st.button("submit")
+if st.button("submit"):
+    # read the data from the dataframe
+    df = st.session_state.completed_elements
+    for ind in df:
+        print(df['execution_order'][ind], df['element_string'][ind])
+
+    # connect to the engine
+        
+        
+    # with engine.connect() as conn:
+    #     sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
+    #     conn.execute(text(sql))
+    #     conn.commit()
+    # st.dataframe(pd.read_sql("select * from main.score", conn))
+
+    # clear the dataframe
+

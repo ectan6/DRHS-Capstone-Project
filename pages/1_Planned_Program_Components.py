@@ -18,6 +18,24 @@ st.title("Event: (title of the event - date, time?)")
 # with t2:
 #     st.write("lp")
 
+def create_jump_buttons(num_rotations: int, element_number: int):
+    if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}"):
+        st.balloons()
+        # print(str(num_rotations))
+        # print(f"{num_rotations}toe-{element_number}")
+    if st.button(label=str(num_rotations), key=f"{num_rotations}sal-{element_number}"):
+        st.balloons()
+    if st.button(label=str(num_rotations), key=f"{num_rotations}loop-{element_number}"):
+        st.balloons()
+    if st.button(label=str(num_rotations), key=f"{num_rotations}flip-{element_number}"):
+        st.balloons()
+    if st.button(label=str(num_rotations), key=f"{num_rotations}lz-{element_number}"):
+        st.balloons()
+    if st.button(label=str(num_rotations), key=f"{num_rotations}axel-{element_number}"):
+        st.balloons()
+    if st.button(label=str(num_rotations), key=f"{num_rotations}eu-{element_number}"):
+        st.balloons()
+
 def ppc_options(element_number: int):
     st.write("these are the element options")
     c1, c2, c3 = st.columns(3)
@@ -26,6 +44,24 @@ def ppc_options(element_number: int):
         # maybe for 3 jump combinations I can make it so that if they click it, it refreshes each time they click a jump
         # ex: click 3 jump combination. click first jump, code appears on dropdown label, repeat 3 times, then 
         # doesn't allow any more jumps to be clicked?
+        c4, c5, c6, c7, c8 = st.columns(5)
+        with c4:
+            st.write("Toeloop")
+            st.write("Salchow")
+            st.write("Loop")
+            st.write("Flip")
+            st.write("Lutz")
+            st.write("Axel")
+            st.write("Euler")
+        with c5:
+            create_jump_buttons(1, element_number)
+        with c6:
+            create_jump_buttons(2, element_number)
+        with c7:
+            create_jump_buttons(3, element_number)
+        with c8:
+            create_jump_buttons(4, element_number)
+            
     with c2:
         st.write("spins")
         # could change all to checkboxes and implement logic like if (fly and upright) then code FUSp
@@ -37,11 +73,18 @@ def ppc_options(element_number: int):
         if st.button(label="Choreographic Sequence", key=f"chsq{element_number}"):
             st.snow()
 
+element_number = 0
+if "element_number" not in st.session_state:
+    st.session_state.element_number = element_number
+else:
+    st.session_state.element_number = element_number
+
 
 # I want to have the label default to "enter an element" and then change to the name of the element
 # when the user selects an element - use some function
 with st.expander("1"):
-    ppc_options(1)
+    st.session_state.element_number = 1
+    ppc_options(st.session_state.element_number)
 with st.expander("2"):
     ppc_options(2)
 with st.expander("3"):
