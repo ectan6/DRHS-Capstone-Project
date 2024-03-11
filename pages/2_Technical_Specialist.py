@@ -49,15 +49,7 @@ def click_button(jump_id: str, spin_id: str, spin_level: int):
     if spin_id:
         st.session_state.completed_elements.loc[
             st.session_state.selected_element - 1, "element_list"
-        ].append(Element(spin_id, spin_level)) # B for level 0
-    
-
-    # connect to the database
-    # with engine.connect() as conn:
-    #     sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
-    #     conn.execute(text(sql))
-    #     conn.commit()
-    # st.dataframe(pd.read_sql("select * from main.score", conn))
+        ].append(Element(spin_id, spin_level)) 
 
 
 # 3 big columns and then nest columns for jumps and spins
@@ -293,7 +285,6 @@ if "completed_elements" not in st.session_state:
         base_data, columns=["execution_order", "element_list", "element_string"]
     )
 
-# completed_elements = pd.DataFrame(base_data, columns=["Execution Order", "Element"])
 element_column = st.session_state.completed_elements["element_list"][
     selected_element - 1
 ]
@@ -320,18 +311,28 @@ def write_to_database(element_list: list, execution_order: int):
         print(element.element, element.level)
         # use sql to write to database
 
+        # still need to figure out jump from spin ? 
+        # with engine.connect() as conn:
+            # sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
+            # conn.execute(text(sql))
+            # conn.commit()
+
         # store the primary key for the table (score_id) - sqlalchemy
         # so if score_id associated, then replace and if none, insert
 
+    # connect to the database
+    # with engine.connect() as conn:
+    #     sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
+    #     conn.execute(text(sql))
+    #     conn.commit()
+    # st.dataframe(pd.read_sql("select * from main.score", conn))
+
 
 if st.button("submit"):
-
     # pass a row of data (has execution order and element list)
     row = st.session_state.completed_elements.iloc[selected_element - 1]
     # print(row['element_list'])
     write_to_database(row['element_list'], row['execution_order'])
-
-    # connect to the engine
 
     # clear the dataframe
 
