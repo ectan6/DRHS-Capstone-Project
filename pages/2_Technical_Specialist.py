@@ -16,6 +16,20 @@ engine = create_engine(
 
 MAX_ELEMENTS = 7
 
+class Element:
+    def __init__(self, element: str, level: int |None):
+        self.element = element
+        self.level = level
+    def print_element(self):
+        if self.level is not None:
+            if self.level == 0:
+                element_string = self.element + "B"
+            else:
+                element_string = self.element + str(self.level)
+        else:
+            element_string = self.element
+        return element_string
+    
 
 menu_with_redirect()
 if st.session_state.role not in ["admin", "super-admin"]:
@@ -28,20 +42,14 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 
 # function for adding elements to the score table in the database
 def click_button(jump_id: str, spin_id: str, spin_level: int):
-
     if jump_id:
         st.session_state.completed_elements.loc[
             st.session_state.selected_element - 1, "element_list"
-        ].append(jump_id)
+        ].append(Element(jump_id, None))
     if spin_id:
-        if (spin_level == 0):
-            st.session_state.completed_elements.loc[
-                st.session_state.selected_element - 1, "element_list"
-            ].append(spin_id + 'B')
-        else:
-            st.session_state.completed_elements.loc[
-                st.session_state.selected_element - 1, "element_list"
-            ].append(spin_id + str(spin_level))
+        st.session_state.completed_elements.loc[
+            st.session_state.selected_element - 1, "element_list"
+        ].append(Element(spin_id, spin_level)) # B for level 0
     
 
     # connect to the database
@@ -289,38 +297,41 @@ if "completed_elements" not in st.session_state:
 element_column = st.session_state.completed_elements["element_list"][
     selected_element - 1
 ]
-element_string = "+".join(str(element) for element in element_column)
+element_string = "+".join(element.print_element() for element in element_column)
 
 # Update the dataframe with the new element
 st.session_state.completed_elements.loc[selected_element - 1, "element_string"] = (
     element_string
 )
 st.dataframe(
-    st.session_state.completed_elements,
+    st.session_state.completed_elements.drop(columns=['element_list']),
     hide_index=True,
     use_container_width=True,
     column_config={
         "execution_order": "Execution Order",
-        "element_list": None,
+        # "element_list": None,
         "element_string": "Element",
     },
 )
 
+def write_to_database(element_list: list, execution_order: int):
+    for element in element_list:
+        print("write element to databse ", element)
+        print(element.element, element.level)
+        # use sql to write to database
+
+        # store the primary key for the table (score_id) - sqlalchemy
+        # so if score_id associated, then replace and if none, insert
+
 
 if st.button("submit"):
-    # read the data from the dataframe
-    df = st.session_state.completed_elements
-    for ind in df:
-        print(df['execution_order'][ind], df['element_string'][ind])
+
+    # pass a row of data (has execution order and element list)
+    row = st.session_state.completed_elements.iloc[selected_element - 1]
+    # print(row['element_list'])
+    write_to_database(row['element_list'], row['execution_order'])
 
     # connect to the engine
-        
-        
-    # with engine.connect() as conn:
-    #     sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
-    #     conn.execute(text(sql))
-    #     conn.commit()
-    # st.dataframe(pd.read_sql("select * from main.score", conn))
 
     # clear the dataframe
 
