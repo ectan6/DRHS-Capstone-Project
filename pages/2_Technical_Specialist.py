@@ -6,7 +6,7 @@ load_dotenv()
 import os
 import pandas as pd
 from streamlit_modal import Modal
-from Planned_Program_Components import create_jump_buttons
+# from Planned_Program_Components import create_jump_buttons
 
 database_name = "postgres"
 postgres_password = os.getenv("POSTGRES_PASSWORD")
@@ -307,32 +307,25 @@ st.dataframe(
 
 def write_to_database(element_list: list, execution_order: int):
     for element in element_list:
-        print("write element to databse ", element)
-        print(element.element, element.level)
-        # use sql to write to database
-
-        # still need to figure out jump from spin ? 
-        # with engine.connect() as conn:
-            # sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
-            # conn.execute(text(sql))
-            # conn.commit()
+        print("write element to databse ", element.element, " ", element.level)
+        with engine.connect() as conn:
+            if (element.level != None):
+                sql = f"INSERT INTO main.score(spin_id, order_executed, spin_level) VALUES('{element.element}', '{execution_order}', '{element.level}')"
+            else:
+                sql = f"INSERT INTO main.score(jump_id, order_executed) VALUES('{element.element}', '{execution_order}')"
+            conn.execute(text(sql))
+            conn.commit()
 
         # store the primary key for the table (score_id) - sqlalchemy
         # so if score_id associated, then replace and if none, insert
-
-    # connect to the database
-    # with engine.connect() as conn:
-    #     sql = f"INSERT INTO main.score(jump_id, spin_id, order_executed, spin_level) VALUES('{jump_id}', '{spin_id}', '{order_executed}', '{spin_level}')"
-    #     conn.execute(text(sql))
-    #     conn.commit()
+            
     # st.dataframe(pd.read_sql("select * from main.score", conn))
 
 
 if st.button("submit"):
     # pass a row of data (has execution order and element list)
     row = st.session_state.completed_elements.iloc[selected_element - 1]
-    # print(row['element_list'])
     write_to_database(row['element_list'], row['execution_order'])
 
-    # clear the dataframe
+    # clear the dataframe (for next program)
 
