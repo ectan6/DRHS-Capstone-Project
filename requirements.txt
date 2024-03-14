@@ -3,3 +3,4 @@ sqlalchemy
 python-dotenv
 psycopg2
 streamlit-modal
+apscheduler

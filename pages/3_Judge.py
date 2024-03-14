@@ -1,6 +1,5 @@
 import streamlit as st
 from menu import menu_with_redirect
-import time
 
 menu_with_redirect()
 
