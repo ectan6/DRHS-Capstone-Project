@@ -6,6 +6,7 @@ load_dotenv()
 import os
 import pandas as pd
 from streamlit_modal import Modal
+import time
 # from Planned_Program_Components import create_jump_buttons
 
 database_name = "postgres"
@@ -321,6 +322,11 @@ def write_to_database(element_list: list, execution_order: int):
             
     # st.dataframe(pd.read_sql("select * from main.score", conn))
 
+changed_data = False
+if "changed_data" not in st.session_state:
+    st.session_state.changed_data = changed_data
+else:
+    st.session_state.changed_data = changed_data
 
 if st.button("submit"):
     # pass a row of data (has execution order and element list)
@@ -328,7 +334,9 @@ if st.button("submit"):
     write_to_database(row['element_list'], row['execution_order'])
 
     # set session state saying that database has been updated (for judging screen)
-    
+    st.session_state.changed_data = True
+    time.sleep(5)
+    st.session_state.changed_data = False
 
     # clear the dataframe (for next program)
 

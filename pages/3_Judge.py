@@ -1,5 +1,6 @@
 import streamlit as st
 from menu import menu_with_redirect
+import time
 
 menu_with_redirect()
 
@@ -16,6 +17,12 @@ with c1:
     # put table here - same as the one on the technical specialist page
 
     # see if session state has changed (from tech specialist submission)
+    # while True:
+    #     if st.session_state.changed_data == True:
+    #         print("just changed the data")
+    #     time.sleep(3)
+    # oops - infinite looped it
+    
 
 
 with c2:
