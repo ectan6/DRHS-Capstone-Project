@@ -14,13 +14,17 @@ c1, c2 = st.columns(2)
 with c1:
     st.write("Completed Program Elements")
     # put table here - same as the one on the technical specialist page
+
+    # see if session state has changed (from tech specialist submission)
+
+
 with c2:
     st.write("Grade of Execution")
     # buttons should line up with the rows on the completed program elements table
 
 st.divider()
 
-# label, min, max, default, step
+# slider arguments: label, min, max, default, step
 skating_skills = st.slider('skating skills', 0.0, 10.0, 5.0, 0.25)
 st.write("you chose", skating_skills, 'for skating skills')
 

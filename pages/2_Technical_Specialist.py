@@ -327,5 +327,8 @@ if st.button("submit"):
     row = st.session_state.completed_elements.iloc[selected_element - 1]
     write_to_database(row['element_list'], row['execution_order'])
 
+    # set session state saying that database has been updated (for judging screen)
+    
+
     # clear the dataframe (for next program)
 
