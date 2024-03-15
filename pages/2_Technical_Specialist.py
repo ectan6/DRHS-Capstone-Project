@@ -2,6 +2,8 @@ import streamlit as st
 from menu import menu_with_redirect
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
+
+from pages.Planned_Program_Components import create_jump_buttons
 load_dotenv()
 import os
 import pandas as pd
@@ -70,20 +72,21 @@ with col1:
         st.write("Axel")
         st.write("Euler")
     with c2:
-        if st.button(label="1", key="1toe"):
-            click_button("1T", "", 2)
-        if st.button(label="1", key="1sal"):
-            click_button("1S", "", 2)
-        if st.button(label="1", key="1loop"):
-            click_button("1Lo", "", 2)
-        if st.button(label="1", key="1flip"):
-            click_button("1F", "", 2)
-        if st.button(label="1", key="1lz"):
-            click_button("1Lz", "", 2)
-        if st.button(label="1", key="1axel"):
-            click_button("1A", "", 2)
-        if st.button(label="1", key="1eu"):
-            click_button("1Eu", "", 2)
+        create_jump_buttons(1, 1)
+        # if st.button(label="1", key="1toe"):
+        #     click_button("1T", "", 2)
+        # if st.button(label="1", key="1sal"):
+        #     click_button("1S", "", 2)
+        # if st.button(label="1", key="1loop"):
+        #     click_button("1Lo", "", 2)
+        # if st.button(label="1", key="1flip"):
+        #     click_button("1F", "", 2)
+        # if st.button(label="1", key="1lz"):
+        #     click_button("1Lz", "", 2)
+        # if st.button(label="1", key="1axel"):
+        #     click_button("1A", "", 2)
+        # if st.button(label="1", key="1eu"):
+        #     click_button("1Eu", "", 2)
     with c3:
         if st.button(label="2", key="2toe"):
             click_button("2T", "", 2)
@@ -123,6 +126,7 @@ with col1:
             click_button("4Lz", "", 2)
         if st.button(label="4", key="4axel"):
             click_button("4A", "", 2)
+
 
 
 modal = Modal(

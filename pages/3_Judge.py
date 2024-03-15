@@ -1,5 +1,6 @@
 import streamlit as st
 from menu import menu_with_redirect
+from apscheduler.schedulers.background import BackgroundScheduler
 
 menu_with_redirect()
 
@@ -10,19 +11,21 @@ if st.session_state.role not in ["admin", "super-admin"]:
 st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
 st.title("judge screen")
 
+sched = BackgroundScheduler()
+
+def check_changed_data():
+    # if st.session_state.changed_data == True:
+    print("just changed the data")
+
+sched.add_job(check_changed_data, 'interval', seconds = 3)
+sched.start()
+
 c1, c2 = st.columns(2)
 with c1:
     st.write("Completed Program Elements")
     # put table here - same as the one on the technical specialist page
 
     # see if session state has changed (from tech specialist submission)
-    # while True:
-    #     if st.session_state.changed_data == True:
-    #         print("just changed the data")
-    #     time.sleep(3)
-    # oops - infinite looped it
-    
-
 
 with c2:
     st.write("Grade of Execution")
