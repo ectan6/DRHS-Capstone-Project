@@ -12,3 +12,9 @@ CREATE TABLE main.score (
 	spin_level int4 NULL,
 	CONSTRAINT score_pk PRIMARY KEY (id)
 );
+
+
+-- main.score foreign keys
+
+ALTER TABLE main.score ADD CONSTRAINT score_jumps_fk FOREIGN KEY (jump_id) REFERENCES main.jumps(jump_id);
+ALTER TABLE main.score ADD CONSTRAINT score_spins_steps_fk FOREIGN KEY (spin_id) REFERENCES main.spins_steps(spin_id);

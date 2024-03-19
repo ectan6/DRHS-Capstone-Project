@@ -1,19 +1,20 @@
--- main.programs definition
+-- main.score definition
 
 -- Drop table
 
--- DROP TABLE main.programs;
+-- DROP TABLE main.score;
 
-CREATE TABLE main.programs (
-	program_id int4 NOT NULL,
-	user_id int4 NULL,
-	"date" date NULL,
-	competition_id int4 NULL,
-	scores _int4 NULL,
-	CONSTRAINT programs_pk PRIMARY KEY (program_id)
+CREATE TABLE main.score (
+	id bigserial NOT NULL,
+	jump_id varchar NULL,
+	spin_id varchar NULL,
+	order_executed int4 NULL,
+	spin_level int4 NULL,
+	CONSTRAINT score_pk PRIMARY KEY (id)
 );
 
 
--- main.programs foreign keys
+-- main.score foreign keys
 
-ALTER TABLE main.programs ADD CONSTRAINT programs_users_fk FOREIGN KEY (user_id) REFERENCES main.users(user_id);
+ALTER TABLE main.score ADD CONSTRAINT score_jumps_fk FOREIGN KEY (jump_id) REFERENCES main.jumps(jump_id);
+ALTER TABLE main.score ADD CONSTRAINT score_spins_steps_fk FOREIGN KEY (spin_id) REFERENCES main.spins_steps(spin_id);
