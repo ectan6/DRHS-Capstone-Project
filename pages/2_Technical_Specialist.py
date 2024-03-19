@@ -10,6 +10,7 @@ import pandas as pd
 from streamlit_modal import Modal
 import time
 # from Planned_Program_Components import create_jump_buttons
+from app import set_changed_data
 
 database_name = "postgres"
 postgres_password = os.getenv("POSTGRES_PASSWORD")
@@ -72,21 +73,21 @@ with col1:
         st.write("Axel")
         st.write("Euler")
     with c2:
-        create_jump_buttons(1, 1)
-        # if st.button(label="1", key="1toe"):
-        #     click_button("1T", "", 2)
-        # if st.button(label="1", key="1sal"):
-        #     click_button("1S", "", 2)
-        # if st.button(label="1", key="1loop"):
-        #     click_button("1Lo", "", 2)
-        # if st.button(label="1", key="1flip"):
-        #     click_button("1F", "", 2)
-        # if st.button(label="1", key="1lz"):
-        #     click_button("1Lz", "", 2)
-        # if st.button(label="1", key="1axel"):
-        #     click_button("1A", "", 2)
-        # if st.button(label="1", key="1eu"):
-        #     click_button("1Eu", "", 2)
+        # create_jump_buttons(1, 1)
+        if st.button(label="1", key="1toe"):
+            click_button("1T", "", 2)
+        if st.button(label="1", key="1sal"):
+            click_button("1S", "", 2)
+        if st.button(label="1", key="1loop"):
+            click_button("1Lo", "", 2)
+        if st.button(label="1", key="1flip"):
+            click_button("1F", "", 2)
+        if st.button(label="1", key="1lz"):
+            click_button("1Lz", "", 2)
+        if st.button(label="1", key="1axel"):
+            click_button("1A", "", 2)
+        if st.button(label="1", key="1eu"):
+            click_button("1Eu", "", 2)
     with c3:
         if st.button(label="2", key="2toe"):
             click_button("2T", "", 2)
@@ -326,21 +327,14 @@ def write_to_database(element_list: list, execution_order: int):
             
     # st.dataframe(pd.read_sql("select * from main.score", conn))
 
-changed_data = False
-if "changed_data" not in st.session_state:
-    st.session_state.changed_data = changed_data
-else:
-    st.session_state.changed_data = changed_data
-
-if st.button("submit"):
+if st.button("submit", key="submit-techspecialist"):
     # pass a row of data (has execution order and element list)
     row = st.session_state.completed_elements.iloc[selected_element - 1]
     write_to_database(row['element_list'], row['execution_order'])
 
     # set session state saying that database has been updated (for judging screen)
-    st.session_state.changed_data = True
+    set_changed_data(True)
     time.sleep(5)
-    st.session_state.changed_data = False
-
+    set_changed_data(False)
     # clear the dataframe (for next program)
 

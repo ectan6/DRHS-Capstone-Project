@@ -1,6 +1,7 @@
 import streamlit as st
 from menu import menu_with_redirect
 from apscheduler.schedulers.background import BackgroundScheduler
+from app import get_changed_data
 
 menu_with_redirect()
 
@@ -14,8 +15,11 @@ st.title("judge screen")
 sched = BackgroundScheduler()
 
 def check_changed_data():
-    # if st.session_state.changed_data == True:
-    print("just changed the data")
+    # WHY DOES THIS NOT WORKKKKKKKKKKKk ok
+    if get_changed_data() == True:
+        print("just changed the data")
+    else: 
+        print("no change")
 
 sched.add_job(check_changed_data, 'interval', seconds = 3)
 sched.start()
@@ -49,4 +53,4 @@ st.write("you chose", choreography, 'for choreography')
 interpretation = st.slider('interpretation', 0.0, 10.0, 5.0, 0.25)
 st.write("you chose", interpretation, 'for interpretation')
 
-st.button("submit")
+st.button("submit", key="submit-judge")
