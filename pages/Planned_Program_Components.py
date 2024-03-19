@@ -38,6 +38,7 @@ def write_to_ppc_table(code: str, order: int):
     with engine.connect() as conn:
         # need to add user_id and program_id at some point
         sql = f"INSERT INTO main.ppc(element_code, element_order) VALUES('{code}', '{order}')"
+        print(f"successfully written {code} to database")
         conn.execute(text(sql))
         conn.commit()
 
@@ -45,18 +46,18 @@ def create_jump_buttons(num_rotations: int, element_number: int):
     if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}"):
         write_to_ppc_table(f"{num_rotations}T", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}sal-{element_number}"):
-        st.balloons()
+        write_to_ppc_table(f"{num_rotations}S", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}loop-{element_number}"):
-        st.balloons()
+        write_to_ppc_table(f"{num_rotations}Lo", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}flip-{element_number}"):
-        st.balloons()
+        write_to_ppc_table(f"{num_rotations}F", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}lz-{element_number}"):
-        st.balloons()
+        write_to_ppc_table(f"{num_rotations}Lz", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}axel-{element_number}"):
-        st.balloons()
+        write_to_ppc_table(f"{num_rotations}A", element_number)
     if st.session_state.first_jump == True:
         if st.button(label=str(num_rotations), key=f"{num_rotations}eu-{element_number}"):
-            st.balloons()
+            write_to_ppc_table(f"{num_rotations}Eu", element_number)
 
 def create_spin_buttons(variation: int, element_number: int):
     lab = ""
@@ -68,7 +69,8 @@ def create_spin_buttons(variation: int, element_number: int):
         lab = "C"
     
     if st.button(label=lab, key = f"{str(variation)}u-{element_number}"):
-        st.snow()
+        # oopsies i need to change the variation from number to string (like in create_spin_buttons function)
+        write_to_ppc_table(f"{str(variation)}USp", element_number)
     if st.button(label=lab, key = f"{str(variation)}l-{element_number}"):
         st.snow()
     if st.button(label=lab, key = f"{str(variation)}c-{element_number}"):
