@@ -334,7 +334,8 @@ if st.button("submit", key="submit-techspecialist"):
 
     # set session state saying that database has been updated (for judging screen)
     set_changed_data(True)
-    time.sleep(5)
+    time.sleep(3)
     set_changed_data(False)
+    
     # clear the dataframe (for next program)
 

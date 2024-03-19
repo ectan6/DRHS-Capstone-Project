@@ -28,11 +28,17 @@ st.selectbox(
 menu() # render dynamic menu
 
 
-if 'changed_data' not in st.session_state:
-    st.session_state.changed_data = False
+# Function to initialize session state
+def init_session_state():
+    return {'changed_data': False}
 
+# Retrieve or initialize session state
+session_state = st.session_state.get('session_state', init_session_state())
+
+# Function to get changed_data
 def get_changed_data():
-    return st.session_state.changed_data
+    return session_state['changed_data']
 
+# Function to set changed_data
 def set_changed_data(state: bool):
-    st.session_state.changed_data = state
+    session_state['changed_data'] = state

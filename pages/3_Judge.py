@@ -2,6 +2,7 @@ import streamlit as st
 from menu import menu_with_redirect
 from apscheduler.schedulers.background import BackgroundScheduler
 from app import get_changed_data
+import pandas as pd
 
 menu_with_redirect()
 
@@ -13,23 +14,39 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 st.title("judge screen")
 
 sched = BackgroundScheduler()
+sched.add_job(get_changed_data, 'interval', seconds = 3)
+sched.start()
 
 def check_changed_data():
-    # WHY DOES THIS NOT WORKKKKKKKKKKKk ok
     if get_changed_data() == True:
-        print("just changed the data")
-    else: 
-        print("no change")
+        st.write("data has changed")
 
-sched.add_job(check_changed_data, 'interval', seconds = 3)
-sched.start()
+def create_new_row(new_element: str):
+    # add a new row to the completed program elements dataframe
+    # completed_program_elements.add_row({'Order': 'New Order', 'Element': 'New Element'})
+    new_row = {'Element': f'{new_element}'}
+    df = df.append(new_row, ignore_index=True)
+    print(df)
+    st.dataframe(df, hide_index=False, column_config={'Element': 'Element'})
+    # add buttons in the same line as the row
+        # c2.button
 
 c1, c2 = st.columns(2)
 with c1:
     st.write("Completed Program Elements")
     # put table here - same as the one on the technical specialist page
+    data = {
+        'Element': ['2Lz']
+    }
+    df = pd.DataFrame(data)
+    df.index += 1
+    completed_program_elements = st.dataframe(df, hide_index=False, column_config={'Element': 'Element'})
 
-    # see if session state has changed (from tech specialist submission)
+    # # see if data has changed
+    # if get_changed_data() == True:
+    #     print("data has changed")
+    #     # add a row to the completed_program_elements dataframe
+    #     create_new_row('3F')
 
 with c2:
     st.write("Grade of Execution")
@@ -37,20 +54,16 @@ with c2:
 
 st.divider()
 
+def create_pcs_sliders(name: str):
+    # slider arguments: label, min, max, default, step
+    name_value = st.slider(f'{name}:', 0.0, 10.0, 5.0, 0.25)
+    st.write("you chose", name_value, f'for {name}')
+
 # slider arguments: label, min, max, default, step
-skating_skills = st.slider('skating skills', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", skating_skills, 'for skating skills')
-
-transitions = st.slider('transitions', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", transitions, 'for transitions')
-
-performance = st.slider('performance', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", performance, 'for performance')
-
-choreography = st.slider('choreography', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", choreography, 'for choreography')
-
-interpretation = st.slider('interpretation', 0.0, 10.0, 5.0, 0.25)
-st.write("you chose", interpretation, 'for interpretation')
+create_pcs_sliders('skating skills')
+create_pcs_sliders('transitions')
+create_pcs_sliders('performance')
+create_pcs_sliders('choreography')
+create_pcs_sliders('interpretation')
 
 st.button("submit", key="submit-judge")
