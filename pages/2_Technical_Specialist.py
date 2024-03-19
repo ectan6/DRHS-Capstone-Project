@@ -2,7 +2,6 @@ import streamlit as st
 from menu import menu_with_redirect
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
-
 from pages.Planned_Program_Components import create_jump_buttons
 load_dotenv()
 import os
@@ -336,6 +335,6 @@ if st.button("submit", key="submit-techspecialist"):
     set_changed_data(True)
     time.sleep(3)
     set_changed_data(False)
-    
+
     # clear the dataframe (for next program)
 

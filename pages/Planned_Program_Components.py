@@ -1,7 +1,17 @@
 import streamlit as st
 from menu import menu_with_redirect
+from sqlalchemy import create_engine, text
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 menu_with_redirect()
+
+database_name = "postgres"
+postgres_password = os.getenv("POSTGRES_PASSWORD")
+engine = create_engine(
+    f"postgresql+psycopg2://postgres:{postgres_password}@localhost:5432/{database_name}"
+)
 
 if st.session_state.role not in ["admin", "super-admin"]:
     st.warning("You do not have permission to view this page.")
@@ -24,9 +34,16 @@ if "first_jump" not in st.session_state:
 else:
     st.session_state.first_jump = first_jump
 
+def write_to_ppc_table(code: str, order: int):
+    with engine.connect() as conn:
+        # need to add user_id and program_id at some point
+        sql = f"INSERT INTO main.ppc(element_code, element_order) VALUES('{code}', '{order}')"
+        conn.execute(text(sql))
+        conn.commit()
+
 def create_jump_buttons(num_rotations: int, element_number: int):
     if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}"):
-        st.balloons()
+        write_to_ppc_table(f"{num_rotations}T", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}sal-{element_number}"):
         st.balloons()
     if st.button(label=str(num_rotations), key=f"{num_rotations}loop-{element_number}"):
