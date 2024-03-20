@@ -19,7 +19,7 @@ sched.start()
 
 def check_changed_data():
     if get_changed_data() == True:
-        st.write("data has changed")
+        print("data has changed")
 
 def create_new_row(new_element: str):
     # add a new row to the completed program elements dataframe
