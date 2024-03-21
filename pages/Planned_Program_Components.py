@@ -45,6 +45,7 @@ def write_to_ppc_table(code: str, order: int):
 def create_jump_buttons(num_rotations: int, element_number: int):
     if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}"):
         write_to_ppc_table(f"{num_rotations}T", element_number)
+        expander_label += f"{num_rotations}T"
     if st.button(label=str(num_rotations), key=f"{num_rotations}sal-{element_number}"):
         write_to_ppc_table(f"{num_rotations}S", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}loop-{element_number}"):
@@ -61,24 +62,27 @@ def create_jump_buttons(num_rotations: int, element_number: int):
 
 def create_spin_buttons(variation: int, element_number: int):
     lab = ""
+    lab_for_db = ""
     if variation == 1:
         lab = "✓"
     elif variation == 2:
         lab = "F"
+        lab_for_db = "F"
     elif variation == 3:
         lab = "C"
+        lab_for_db = "C"
     
     if st.button(label=lab, key = f"{str(variation)}u-{element_number}"):
         # oopsies i need to change the variation from number to string (like in create_spin_buttons function)
-        write_to_ppc_table(f"{str(variation)}USp", element_number)
+        write_to_ppc_table(f"{lab_for_db}USp", element_number)
     if st.button(label=lab, key = f"{str(variation)}l-{element_number}"):
-        st.snow()
+        write_to_ppc_table(f"{lab_for_db}LSp", element_number)
     if st.button(label=lab, key = f"{str(variation)}c-{element_number}"):
-        st.snow()
+        write_to_ppc_table(f"{lab_for_db}CSp", element_number)
     if st.button(label=lab, key = f"{str(variation)}s-{element_number}"):
-        st.snow()
+        write_to_ppc_table(f"{lab_for_db}SSp", element_number)
     if st.button(label=lab, key = f"{str(variation)}co-{element_number}"):
-        st.snow()
+        write_to_ppc_table(f"{lab_for_db}CoSp", element_number)
 
 def ppc_options(element_number: int):
     st.write("these are the element options")
@@ -129,26 +133,18 @@ def ppc_options(element_number: int):
     with c3:
         st.write("Sequences")
         if st.button(label="Step Sequence", key=f"stsq{element_number}"):
-            # something silly for now hehe
-            st.balloons()
+            write_to_ppc_table("StSq", element_number)
         if st.button(label="Choreographic Sequence", key=f"chsq{element_number}"):
-            st.snow()
+            write_to_ppc_table("ChSq", element_number)
 
 # I want to have the label default to "enter an element" and then change to the name of the element
 # when the user selects an element - use some function
-with st.expander("1"):
-    ppc_options(1)
-with st.expander("2"):
-    ppc_options(2)
-with st.expander("3"):
-    ppc_options(3)
-with st.expander("4"):
-    ppc_options(4)
-with st.expander("5"):
-    ppc_options(5)
-with st.expander("6"):
-    ppc_options(6)
-with st.expander("7"):
-    ppc_options(7)
+
+for i in range(1, 8):
+    expander_label = f"{i}"
+    with st.expander(expander_label):
+        ppc_options(i)
+
+
 
 st.button("submit", key="submit-ppc")
