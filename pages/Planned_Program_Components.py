@@ -45,7 +45,7 @@ def write_to_ppc_table(code: str, order: int):
 def create_jump_buttons(num_rotations: int, element_number: int):
     if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}"):
         write_to_ppc_table(f"{num_rotations}T", element_number)
-        expander_label += f"{num_rotations}T"
+        # expander_label += f"{num_rotations}T"
     if st.button(label=str(num_rotations), key=f"{num_rotations}sal-{element_number}"):
         write_to_ppc_table(f"{num_rotations}S", element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}loop-{element_number}"):
