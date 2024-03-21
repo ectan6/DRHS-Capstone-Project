@@ -13,23 +13,24 @@ if st.session_state.role not in ["admin", "super-admin"]:
 st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
 st.title("judge screen")
 
-sched = BackgroundScheduler()
-sched.add_job(get_changed_data, 'interval', seconds = 3)
-sched.start()
-
-def check_changed_data():
-    if get_changed_data() == True:
-        print("data has changed")
-
-def create_new_row(new_element: str):
+def create_new_row(new_element: str, df1: pd.DataFrame):
     # add a new row to the completed program elements dataframe
     # completed_program_elements.add_row({'Order': 'New Order', 'Element': 'New Element'})
     new_row = {'Element': f'{new_element}'}
-    df = df.append(new_row, ignore_index=True)
-    print(df)
-    st.dataframe(df, hide_index=False, column_config={'Element': 'Element'})
+    df1 = df1.append(new_row, ignore_index=True)
+    print(df1)
+    c1.dataframe(df1, hide_index=False, column_config={'Element': 'Element'})
+
     # add buttons in the same line as the row
         # c2.button
+    
+def check_changed_data():
+    if get_changed_data() == True:
+        print("data has changed")
+        # add a row to the completed_program_elements dataframe
+        create_new_row('3F', df)
+    else: 
+        print("data has not changed")
 
 c1, c2 = st.columns(2)
 with c1:
@@ -42,15 +43,13 @@ with c1:
     df.index += 1
     completed_program_elements = st.dataframe(df, hide_index=False, column_config={'Element': 'Element'})
 
-    # # see if data has changed
-    # if get_changed_data() == True:
-    #     print("data has changed")
-    #     # add a row to the completed_program_elements dataframe
-    #     create_new_row('3F')
-
 with c2:
     st.write("Grade of Execution")
     # buttons should line up with the rows on the completed program elements table
+
+sched = BackgroundScheduler()
+sched.add_job(check_changed_data, 'interval', seconds = 3)
+sched.start()
 
 st.divider()
 
