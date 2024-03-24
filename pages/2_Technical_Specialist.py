@@ -318,6 +318,7 @@ def write_to_database(element_list: list, execution_order: int):
                 sql = f"INSERT INTO main.score(spin_id, order_executed, spin_level) VALUES('{element.element}', '{execution_order}', '{element.level}')"
             else:
                 sql = f"INSERT INTO main.score(jump_id, order_executed) VALUES('{element.element}', '{execution_order}')"
+            sql2 = f""
             conn.execute(text(sql))
             conn.commit()
 

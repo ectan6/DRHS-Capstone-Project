@@ -1,5 +1,6 @@
 import streamlit as st
 from menu import menu
+import pandas as pd
 
 
 if "role" not in st.session_state:
@@ -28,17 +29,28 @@ st.selectbox(
 menu() # render dynamic menu
 
 
-# Function to initialize session state
+# changed_data session state for polling 
 def init_session_state():
     return {'changed_data': False}
-
-# Retrieve or initialize session state
 session_state = st.session_state.get('session_state', init_session_state())
-
-# Function to get changed_data
 def get_changed_data():
     return session_state['changed_data']
-
-# Function to set changed_data
 def set_changed_data(state: bool):
     session_state['changed_data'] = state
+
+
+# creating dataframe for judging screen
+data = {
+    'Element': ['2Lz']
+}
+df = pd.DataFrame(data)
+df.index += 1
+
+if "completed_program_elements" not in st.session_state:
+    st.session_state.completed_program_elements = df
+
+# setting the user_id and the program_id
+if "user_id" not in st.session_state:
+    st.session_state.user_id = 1
+if "program_id" not in st.session_state:
+    st.session_state.program_id = 1

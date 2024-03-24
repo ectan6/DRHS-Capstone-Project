@@ -24,44 +24,24 @@ st.title("judge screen")
 
 c1, c2 = st.columns(2)
 
-# creating dataframe
-data = {
-    'Element': ['2Lz']
-}
-df = pd.DataFrame(data)
-df.index += 1
-
-if "completed_program_elements" not in st.session_state:
-    st.session_state.completed_program_elements = df
 
 print(st.session_state.completed_program_elements)
 
+# will probably not be using this function
 def create_new_row(new_element: str):
-    # polling is running before rendering the screen
-    # if "completed_program_elements" not in st.session_state:
-    #     data = {
-    #     'Element': ['2Lz']
-    #     }
-    #     df = pd.DataFrame(data)
-    #     df.index += 1
-
-    #     st.session_state.completed_program_elements = df
-
     print(st.session_state.completed_program_elements)
 
     new_row = pd.DataFrame({'Element': [new_element]})
     st.session_state.completed_program_elements = pd.concat([st.session_state.completed_program_elements, new_row], ignore_index=True)
     
-    # df1 = pd.concat([df1, new_row], ignore_index=True)
-    # print(df1)
-    # st.dataframe(df1, hide_index=False, column_config={'Element': 'Element'})
     # c1.write(df1, hide_index=False, column_config={'Element': 'Element'})
 
 def check_changed_data():
     if get_changed_data() == True:
         print("data has changed")
         with engine.connect() as conn:
-            # user and program id to be added so that know when to start reading
+            # user and program id to be added so that know when to start reading   
+            print(st.session_state.completed_program_elements)
             df = pd.read_sql("SELECT * FROM main.score", conn)
             print(df)
             # c1.dataframe(df, hide_index=False, column_config={'Element': 'Element'})
