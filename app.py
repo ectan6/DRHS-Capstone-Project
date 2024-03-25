@@ -34,9 +34,18 @@ menu()  # render dynamic menu
 if "changed_data" not in st.session_state:
     st.session_state.changed_data = False
 
+# Create a list of available users given a competition
+# Call to DB
+# st.session_state.available_users = sql("SELECT p.user_id, u.first_name, u.last_name FROM programs p join users on users.id = programs.user_id u WHERE p.competition_id = st.session_state.competition_id")
+if "available_users" not in st.session_state:
+    st.session_state.available_users = [{"user_id": 1, "first_name": "John", "last_name": "Doe"}, {"user_id": 2, "first_name": "Jane", "last_name": "Doe"}]
+
 # setting the user_id
 if "user_id" not in st.session_state:
-    st.session_state.user_id = 1
+    st.session_state.user_id = None
+
+if "user_index" not in st.session_state:
+    st.session_state.user_index = None
 # program_id is a bigserial in the programs table - might need to change this
 if "program_id" not in st.session_state:
     st.session_state.program_id = 1
