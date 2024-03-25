@@ -285,8 +285,8 @@ def write_to_database(element_list: list, execution_order: int):
             print("user id: ", st.session_state.user_id)  
             print("curremt element") 
             print(current_element)
-            # sql2 = f"UPDATE main.programs SET scores = array_append(scores, {current_element['id']}) WHERE user_id = {st.session_state.user_id};"
-            # conn.execute(text(sql2))
+            sql2 = f"UPDATE main.programs SET scores = array_append(scores, {current_element['id']}) WHERE user_id = {st.session_state.user_id};"
+            conn.execute(text(sql2))
             conn.commit()
     # set session state saying that database has been updated (for judging screen)
     set_changed_data(True)
