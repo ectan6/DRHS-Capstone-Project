@@ -4,7 +4,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 # from app import get_changed_data
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,26 +42,14 @@ def create_new_row(new_element: str):
     # c1.write(df1, hide_index=False, column_config={'Element': 'Element'})
 
 
-def check_changed_data():
-    changed_data = st.session_state.changed_data
-    print(changed_data)
-    # if get_changed_data() == True:
-    #     print("data has changed")
-    #     with engine.connect() as conn:
-    #         # user and program id to be added so that know when to start reading
-    #         print(st.session_state.completed_program_elements)
-    #         df = pd.read_sql("SELECT * FROM main.score", conn)
-    #         print(df)
-    #         # c1.dataframe(df, hide_index=False, column_config={'Element': 'Element'})
-    # else:
-    #     print("data has not changed")
-
-
 with c1:
     st.write("Completed Program Elements")
 
+    data = pd.DataFrame({})
+
     if st.session_state.changed_data:
         # Connect to the DB and read in a score for the user_id and program_id
+        print("Getting an update from the DB")
 
         # Create a dummy dataframe for now
         data = pd.DataFrame({"Element": ["2F"]})
@@ -79,10 +67,6 @@ with c1:
 with c2:
     st.write("Grade of Execution")
     # add buttons - will use a function
-
-# sched = BackgroundScheduler()
-# sched.add_job(check_changed_data, "interval", seconds=3)
-# sched.start()
 
 st.divider()
 

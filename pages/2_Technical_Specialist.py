@@ -3,11 +3,13 @@ from menu import menu_with_redirect
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 from pages.Planned_Program_Components import create_jump_buttons
+
 load_dotenv()
 import os
 import pandas as pd
 from streamlit_modal import Modal
 import time
+
 # from Planned_Program_Components import create_jump_buttons
 # from app import set_changed_data
 
@@ -19,10 +21,12 @@ engine = create_engine(
 
 MAX_ELEMENTS = 7
 
+
 class Element:
-    def __init__(self, element: str, level: int |None):
+    def __init__(self, element: str, level: int | None):
         self.element = element
         self.level = level
+
     def print_element(self):
         if self.level is not None:
             if self.level == 0:
@@ -32,7 +36,7 @@ class Element:
         else:
             element_string = self.element
         return element_string
-    
+
 
 menu_with_redirect()
 if st.session_state.role not in ["admin", "super-admin"]:
@@ -52,7 +56,7 @@ def click_button(jump_id: str, spin_id: str, spin_level: int):
     if spin_id:
         st.session_state.completed_elements.loc[
             st.session_state.selected_element - 1, "element_list"
-        ].append(Element(spin_id, spin_level)) 
+        ].append(Element(spin_id, spin_level))
 
 
 # 3 big columns and then nest columns for jumps and spins
@@ -126,7 +130,6 @@ with col1:
             click_button("4Lz", "", 2)
         if st.button(label="4", key="4axel"):
             click_button("4A", "", 2)
-
 
 
 modal = Modal(
@@ -273,7 +276,7 @@ def write_to_database(element_list: list, execution_order: int):
     for element in element_list:
         print("write element to database ", element.element, " ", element.level)
         with engine.connect() as conn:
-            if (element.level != None):
+            if element.level != None:
                 sql = f"INSERT INTO main.score(spin_id, order_executed, spin_level) VALUES('{element.element}', '{execution_order}', '{element.level}')"
             else:
                 sql = f"INSERT INTO main.score(jump_id, order_executed) VALUES('{element.element}', '{execution_order}')"
@@ -281,7 +284,7 @@ def write_to_database(element_list: list, execution_order: int):
             conn.commit()
     # set session state saying that database has been updated (for judging screen)
     # set_changed_data(True)
-    print('Changing state to true')
+    print("Changing state to true")
     st.session_state.changed_data = True
 
 
@@ -294,12 +297,12 @@ if st.session_state.selected_element < MAX_ELEMENTS:
         else:
             st.session_state.modal_selected_element = 2
         row = st.session_state.completed_elements.iloc[selected_element - 1]
-        write_to_database(row['element_list'], row['execution_order'])
+        write_to_database(row["element_list"], row["execution_order"])
         st.rerun()
 else:
     if st.button("Submit", use_container_width=True):
         row = st.session_state.completed_elements.iloc[selected_element - 1]
-        write_to_database(row['element_list'], row['execution_order'])
+        write_to_database(row["element_list"], row["execution_order"])
 
 base_data = {
     "execution_order": [i for i in range(1, MAX_ELEMENTS + 1)],
@@ -323,7 +326,7 @@ st.session_state.completed_elements.loc[selected_element - 1, "element_string"] 
     element_string
 )
 st.dataframe(
-    st.session_state.completed_elements.drop(columns=['element_list']),
+    st.session_state.completed_elements.drop(columns=["element_list"]),
     hide_index=True,
     use_container_width=True,
     column_config={
@@ -335,5 +338,3 @@ st.dataframe(
 
 
 # if st.button("submit", key="submit-techspecialist"):
-    
-

@@ -3,6 +3,7 @@ from menu import menu_with_redirect
 from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 menu_with_redirect()
@@ -21,7 +22,7 @@ st.markdown(f"You are currently logged with the role of {st.session_state.role}.
 
 st.title("Event: (title of the event - date, time?)")
 
-# something to consider: multiple tabs for multiple programs (short and long) ? 
+# something to consider: multiple tabs for multiple programs (short and long) ?
 # t1, t2 = st.tabs(["short program", "long program"])
 # with t1:
 #     st.write("sp")
@@ -34,6 +35,7 @@ if "first_jump" not in st.session_state:
 else:
     st.session_state.first_jump = first_jump
 
+
 def write_to_ppc_table(code: str, order: int):
     with engine.connect() as conn:
         # need to add user_id and program_id at some point
@@ -41,6 +43,7 @@ def write_to_ppc_table(code: str, order: int):
         print(f"successfully written {code} to database")
         conn.execute(text(sql))
         conn.commit()
+
 
 def create_jump_buttons(num_rotations: int, element_number: int):
     if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}"):
@@ -57,8 +60,11 @@ def create_jump_buttons(num_rotations: int, element_number: int):
     if st.button(label=str(num_rotations), key=f"{num_rotations}axel-{element_number}"):
         write_to_ppc_table(f"{num_rotations}A", element_number)
     if st.session_state.first_jump == True:
-        if st.button(label=str(num_rotations), key=f"{num_rotations}eu-{element_number}"):
+        if st.button(
+            label=str(num_rotations), key=f"{num_rotations}eu-{element_number}"
+        ):
             write_to_ppc_table(f"{num_rotations}Eu", element_number)
+
 
 def create_spin_buttons(variation: int, element_number: int):
     lab = ""
@@ -71,18 +77,19 @@ def create_spin_buttons(variation: int, element_number: int):
     elif variation == 3:
         lab = "C"
         lab_for_db = "C"
-    
-    if st.button(label=lab, key = f"{str(variation)}u-{element_number}"):
+
+    if st.button(label=lab, key=f"{str(variation)}u-{element_number}"):
         # oopsies i need to change the variation from number to string (like in create_spin_buttons function)
         write_to_ppc_table(f"{lab_for_db}USp", element_number)
-    if st.button(label=lab, key = f"{str(variation)}l-{element_number}"):
+    if st.button(label=lab, key=f"{str(variation)}l-{element_number}"):
         write_to_ppc_table(f"{lab_for_db}LSp", element_number)
-    if st.button(label=lab, key = f"{str(variation)}c-{element_number}"):
+    if st.button(label=lab, key=f"{str(variation)}c-{element_number}"):
         write_to_ppc_table(f"{lab_for_db}CSp", element_number)
-    if st.button(label=lab, key = f"{str(variation)}s-{element_number}"):
+    if st.button(label=lab, key=f"{str(variation)}s-{element_number}"):
         write_to_ppc_table(f"{lab_for_db}SSp", element_number)
-    if st.button(label=lab, key = f"{str(variation)}co-{element_number}"):
+    if st.button(label=lab, key=f"{str(variation)}co-{element_number}"):
         write_to_ppc_table(f"{lab_for_db}CoSp", element_number)
+
 
 def ppc_options(element_number: int):
     st.write("these are the element options")
@@ -90,7 +97,7 @@ def ppc_options(element_number: int):
     with c1:
         st.write("jumps")
         # maybe for 3 jump combinations I can make it so that if they click it, it refreshes each time they click a jump
-        # ex: click 3 jump combination. click first jump, code appears on dropdown label, repeat 3 times, then 
+        # ex: click 3 jump combination. click first jump, code appears on dropdown label, repeat 3 times, then
         # doesn't allow any more jumps to be clicked?
         # nah just do what I did for the tech specialist page
         c4, c5, c6, c7, c8 = st.columns(5)
@@ -112,7 +119,7 @@ def ppc_options(element_number: int):
             create_jump_buttons(3, element_number)
         with c8:
             create_jump_buttons(4, element_number)
-            
+
     with c2:
         st.write("spins")
         # could change all to checkboxes and implement logic like if (fly and upright) then code FUSp
@@ -137,6 +144,7 @@ def ppc_options(element_number: int):
         if st.button(label="Choreographic Sequence", key=f"chsq{element_number}"):
             write_to_ppc_table("ChSq", element_number)
 
+
 # I want to have the label default to "enter an element" and then change to the name of the element
 # when the user selects an element - use some function
 
@@ -144,7 +152,6 @@ for i in range(1, 8):
     expander_label = f"{i}"
     with st.expander(expander_label):
         ppc_options(i)
-
 
 
 st.button("submit", key="submit-ppc")
