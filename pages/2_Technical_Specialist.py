@@ -9,7 +9,7 @@ import pandas as pd
 from streamlit_modal import Modal
 import time
 # from Planned_Program_Components import create_jump_buttons
-from app import set_changed_data
+# from app import set_changed_data
 
 database_name = "postgres"
 postgres_password = os.getenv("POSTGRES_PASSWORD")
@@ -280,9 +280,9 @@ def write_to_database(element_list: list, execution_order: int):
             conn.execute(text(sql))
             conn.commit()
     # set session state saying that database has been updated (for judging screen)
-    set_changed_data(True)
-    time.sleep(3)
-    set_changed_data(False)
+    # set_changed_data(True)
+    print('Changing state to true')
+    st.session_state.changed_data = True
 
 
 # If selected element is less than the max, display a button to increment it
