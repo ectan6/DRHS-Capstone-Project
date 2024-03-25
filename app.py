@@ -34,6 +34,7 @@ def init_session_state():
     return {'changed_data': False}
 session_state = st.session_state.get('session_state', init_session_state())
 def get_changed_data():
+    print(session_state.to_dict())
     return session_state['changed_data']
 def set_changed_data(state: bool):
     session_state['changed_data'] = state

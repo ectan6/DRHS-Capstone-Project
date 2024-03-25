@@ -278,15 +278,6 @@ def write_to_database(element_list: list, execution_order: int):
             else:
                 sql = f"INSERT INTO main.score(jump_id, order_executed) VALUES('{element.element}', '{execution_order}')"
             conn.execute(text(sql))
-            # select row as the last row in the table
-            current_element = pd.read_sql("SELECT * FROM main.score ORDER BY id DESC LIMIT 1", conn)
-            # print(current_element)            
-            # add to the end of the score array in the programs table
-            print("user id: ", st.session_state.user_id)  
-            print("curremt element") 
-            print(current_element)
-            sql2 = f"UPDATE main.programs SET scores = array_append(scores, {current_element['id']}) WHERE user_id = {st.session_state.user_id};"
-            conn.execute(text(sql2))
             conn.commit()
     # set session state saying that database has been updated (for judging screen)
     set_changed_data(True)

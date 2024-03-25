@@ -25,7 +25,7 @@ st.title("judge screen")
 c1, c2 = st.columns(2)
 
 
-print(st.session_state.completed_program_elements)
+# print(st.session_state.completed_program_elements)
 
 # will probably not be using this function
 def create_new_row(new_element: str):
@@ -41,7 +41,8 @@ def check_changed_data():
         print("data has changed")
         with engine.connect() as conn:
             # user and program id to be added so that know when to start reading   
-            print(st.session_state.completed_program_elements)
+            print(st.session_state.to_dict())
+            # print(st.session_state.completed_program_elements)
             df = pd.read_sql("SELECT * FROM main.score", conn)
             print(df)
             # c1.dataframe(df, hide_index=False, column_config={'Element': 'Element'})
