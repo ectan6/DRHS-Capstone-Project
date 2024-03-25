@@ -268,6 +268,32 @@ else:
     # If selected element is not the same as the one in state, update it
     st.session_state.selected_element = selected_element
 
+
+def write_to_database(element_list: list, execution_order: int):
+    for element in element_list:
+        print("write element to database ", element.element, " ", element.level)
+        with engine.connect() as conn:
+            if (element.level != None):
+                sql = f"INSERT INTO main.score(spin_id, order_executed, spin_level) VALUES('{element.element}', '{execution_order}', '{element.level}')"
+            else:
+                sql = f"INSERT INTO main.score(jump_id, order_executed) VALUES('{element.element}', '{execution_order}')"
+            conn.execute(text(sql))
+            # select row as the last row in the table
+            current_element = pd.read_sql("SELECT * FROM main.score ORDER BY id DESC LIMIT 1", conn)
+            # print(current_element)            
+            # add to the end of the score array in the programs table
+            print("user id: ", st.session_state.user_id)  
+            print("curremt element") 
+            print(current_element)
+            # sql2 = f"UPDATE main.programs SET scores = array_append(scores, {current_element['id']}) WHERE user_id = {st.session_state.user_id};"
+            # conn.execute(text(sql2))
+            conn.commit()
+    # set session state saying that database has been updated (for judging screen)
+    set_changed_data(True)
+    time.sleep(3)
+    set_changed_data(False)
+
+
 # If selected element is less than the max, display a button to increment it
 if st.session_state.selected_element < MAX_ELEMENTS:
     # Create a button to increment the selected element
@@ -276,7 +302,13 @@ if st.session_state.selected_element < MAX_ELEMENTS:
             st.session_state.modal_selected_element += 1
         else:
             st.session_state.modal_selected_element = 2
+        row = st.session_state.completed_elements.iloc[selected_element - 1]
+        write_to_database(row['element_list'], row['execution_order'])
         st.rerun()
+else:
+    if st.button("Submit", use_container_width=True):
+        row = st.session_state.completed_elements.iloc[selected_element - 1]
+        write_to_database(row['element_list'], row['execution_order'])
 
 base_data = {
     "execution_order": [i for i in range(1, MAX_ELEMENTS + 1)],
@@ -310,32 +342,7 @@ st.dataframe(
     },
 )
 
-def write_to_database(element_list: list, execution_order: int):
-    for element in element_list:
-        print("write element to databse ", element.element, " ", element.level)
-        with engine.connect() as conn:
-            if (element.level != None):
-                sql = f"INSERT INTO main.score(spin_id, order_executed, spin_level) VALUES('{element.element}', '{execution_order}', '{element.level}')"
-            else:
-                sql = f"INSERT INTO main.score(jump_id, order_executed) VALUES('{element.element}', '{execution_order}')"
-            sql2 = f""
-            conn.execute(text(sql))
-            conn.commit()
 
-        # store the primary key for the table (score_id) - sqlalchemy
-        # so if score_id associated, then replace and if none, insert
-            
-    # st.dataframe(pd.read_sql("select * from main.score", conn))
-
-if st.button("submit", key="submit-techspecialist"):
-    # pass a row of data (has execution order and element list)
-    row = st.session_state.completed_elements.iloc[selected_element - 1]
-    write_to_database(row['element_list'], row['execution_order'])
-
-    # set session state saying that database has been updated (for judging screen)
-    set_changed_data(True)
-    time.sleep(3)
-    set_changed_data(False)
-
-    # clear the dataframe (for next program)
+# if st.button("submit", key="submit-techspecialist"):
+    
 

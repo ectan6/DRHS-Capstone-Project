@@ -49,8 +49,9 @@ df.index += 1
 if "completed_program_elements" not in st.session_state:
     st.session_state.completed_program_elements = df
 
-# setting the user_id and the program_id
+# setting the user_id 
 if "user_id" not in st.session_state:
     st.session_state.user_id = 1
+# program_id is a bigserial in the programs table - might need to change this
 if "program_id" not in st.session_state:
     st.session_state.program_id = 1
