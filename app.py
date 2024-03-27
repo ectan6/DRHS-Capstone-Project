@@ -41,25 +41,25 @@ st.selectbox(
 # Create a list of available users given a competition
 comp = st.selectbox("Select a competition", ["comp1", "comp2", "comp3"])
 comp_id = comp[4:5]
-print(comp_id)
+st.session_state.competition_id = int(comp_id)
 
 # Call to DB
 with engine.connect() as conn:
-    st.session_state.available_users = pd.read_sql(f"SELECT p.user_id, u.first_name, u.last_name FROM programs p join users on users.id = programs.user_id u WHERE p.competition_id = {comp}", conn)
-    st.session_state.available_users = pd.DataFrame(
-        {
-            "user_id": [1, 2],
-            "first_name": ["John", "Jane"],
-            "last_name": ["Doe", "Doe"],
-        }
-    )
-# st.session_state.available_users = sql("SELECT p.user_id, u.first_name, u.last_name FROM programs p join users on users.id = programs.user_id u WHERE p.competition_id = st.session_state.competition_id")
-st.write("select a user to judge")
+    query = f"""
+        SELECT p.user_id, u.first_name, u.last_name 
+        FROM main.programs p 
+        JOIN main.users u ON u.user_id = p.user_id 
+        WHERE p.competition_id = {int(comp_id)}
+    """
+    st.session_state.available_users = pd.read_sql(query, conn)
+    print(st.session_state.available_users)
+user_list = st.session_state.available_users.to_dict(orient="records")
 user_dict = st.selectbox(
-    "Select a user: ",
-    st.session_state.available_users,
+    "Select a competitor: ",
+    user_list,
     format_func=lambda x: x["first_name"] + " " + x["last_name"],
 )
+st.session_state.user_id = user_dict["user_id"]
 
 
 menu()  # render dynamic menu
@@ -78,7 +78,9 @@ if "user_index" not in st.session_state:
     st.session_state.user_index = None
 # program_id is a bigserial in the programs table - might need to change this
 if "program_id" not in st.session_state:
-    st.session_state.program_id = 1
+    st.session_state.program_id = None
+if "competition_id" not in st.session_state:
+    st.session_state.competition_id = None
 
 
 print("Session state from app.py ", st.session_state.to_dict())

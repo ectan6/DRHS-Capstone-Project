@@ -107,10 +107,6 @@ def ppc_options(element_number: int):
     c1, c2, c3 = st.columns(3)
     with c1:
         st.write("jumps")
-        # maybe for 3 jump combinations I can make it so that if they click it, it refreshes each time they click a jump
-        # ex: click 3 jump combination. click first jump, code appears on dropdown label, repeat 3 times, then
-        # doesn't allow any more jumps to be clicked?
-        # nah just do what I did for the tech specialist page
         c4, c5, c6, c7, c8 = st.columns(5)
         with c4:
             st.write("Toeloop")
