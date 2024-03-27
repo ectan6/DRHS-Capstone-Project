@@ -1,6 +1,6 @@
 import streamlit as st
 from menu import menu_with_redirect
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
 
 # from app import get_changed_data
 import pandas as pd
@@ -63,6 +63,12 @@ with c1:
 
         # Create a dummy dataframe for now
         data = pd.DataFrame({"Element": ["2F"]})
+        with engine.connect() as conn:
+            # if spin_id is null then the element is a jump
+            latest_element = pd.read_sql(f"SELECT 'jump_id' FROM main.score ORDER BY id DESC LIMIT 3 WHERE program_id = {st.session_state.program_id}", conn)
+            print(latest_element)
+        # replace 3Lz with readable element 
+        data = data.append({"Element": "3Lz"}, ignore_index=True)
 
         # Revert the changed_data flag
         st.session_state.changed_data = False

@@ -7,9 +7,7 @@
 CREATE TABLE main.programs (
 	program_id bigserial NOT NULL,
 	user_id int4 NULL,
-	"date" date NULL,
 	competition_id int4 NULL,
-	scores _int4 NULL,
 	CONSTRAINT programs_pk PRIMARY KEY (program_id)
 );
 
