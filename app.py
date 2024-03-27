@@ -40,6 +40,7 @@ st.selectbox(
 
 # Create a list of available users given a competition
 comp = st.selectbox("Select a competition", ["comp1", "comp2", "comp3"])
+st.session_state.competition_name = comp
 comp_id = comp[4:5]
 st.session_state.competition_id = int(comp_id)
 
@@ -53,6 +54,15 @@ with engine.connect() as conn:
     """
     st.session_state.available_users = pd.read_sql(query, conn)
     print(st.session_state.available_users)
+    query2 = f"""
+        SELECT program_id
+        FROM main.programs
+        WHERE competition_id = {int(comp_id)}
+    """
+    st.session_state.program_id = pd.read_sql(query2, conn).iloc[0, 0]
+    print(st.session_state.program_id)
+
+
 user_list = st.session_state.available_users.to_dict(orient="records")
 user_dict = st.selectbox(
     "Select a competitor: ",
@@ -60,6 +70,8 @@ user_dict = st.selectbox(
     format_func=lambda x: x["first_name"] + " " + x["last_name"],
 )
 st.session_state.user_id = user_dict["user_id"]
+st.session_state.user_name = user_dict["first_name"] + " " + user_dict["last_name"]
+print(st.session_state.user_name)
 
 
 menu()  # render dynamic menu
@@ -73,6 +85,8 @@ if "available_users" not in st.session_state:
 # setting the user_id
 if "user_id" not in st.session_state:
     st.session_state.user_id = None
+if "user_name" not in st.session_state:
+    st.session_state.user_name = None
 
 if "user_index" not in st.session_state:
     st.session_state.user_index = None
@@ -81,6 +95,8 @@ if "program_id" not in st.session_state:
     st.session_state.program_id = None
 if "competition_id" not in st.session_state:
     st.session_state.competition_id = None
+if "competition_name" not in st.session_state:
+    st.session_state.competition_name = None
 
 
 print("Session state from app.py ", st.session_state.to_dict())

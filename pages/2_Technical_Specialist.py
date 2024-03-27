@@ -44,8 +44,6 @@ if st.session_state.role not in ["admin", "super-admin"]:
     st.stop()
 
 st.title("tech specialist screen")
-st.markdown(f"You are currently logged with the role of {st.session_state.role}.")
-
 
 # function for adding elements to the score table in the database
 def click_button(jump_id: str, spin_id: str, spin_level: int):
@@ -60,16 +58,17 @@ def click_button(jump_id: str, spin_id: str, spin_level: int):
 
 
 # If there is a user id, then find its location in the available users list
-if "user_id" in st.session_state:
-    for i, user in enumerate(st.session_state.available_users):
-        if user["user_id"] == st.session_state.user_id:
-            st.session_state.user_index = i
+# if "user_id" in st.session_state:
+#     for i, user in enumerate(st.session_state.available_users):
+#         if user["user_id"] == st.session_state.user_id:
+#             st.session_state.user_index = i
 
-user_dict = st.selectbox("Select a user: ", st.session_state.available_users, format_func=lambda x: x["first_name"] + " " + x["last_name"], index=st.session_state.user_index)
+# user_dict = st.selectbox("Select a user: ", st.session_state.available_users, format_func=lambda x: x["first_name"] + " " + x["last_name"], index=st.session_state.user_index)
 
-if user_dict:
-    st.session_state.user_id = user_dict["user_id"]
+# if user_dict:
+#     st.session_state.user_id = user_dict["user_id"]
 
+st.write("Competitor: ", st.session_state.user_name)
 st.write("Program: ", st.session_state.program_id)
 
 # 3 big columns and then nest columns for jumps and spins
