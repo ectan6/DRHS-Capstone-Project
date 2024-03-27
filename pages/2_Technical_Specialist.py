@@ -289,9 +289,11 @@ def write_to_database(element_list: list, execution_order: int):
         print("write element to database ", element.element, " ", element.level)
         with engine.connect() as conn:
             if element.level != None:
-                sql = f"INSERT INTO main.score(spin_id, order_executed, spin_level) VALUES('{element.element}', '{execution_order}', '{element.level}')"
+                sql = f"""INSERT INTO main.score(spin_id, order_executed, spin_level, user_id, program_id) 
+                VALUES('{element.element}', '{execution_order}', '{element.level}', '{st.session_state.user_id}', '{st.session_state.program_id}')"""
             else:
-                sql = f"INSERT INTO main.score(jump_id, order_executed) VALUES('{element.element}', '{execution_order}')"
+                sql = f"""INSERT INTO main.score(jump_id, order_executed, user_id, program_id) 
+                VALUES('{element.element}', '{execution_order}', '{st.session_state.user_id}', '{st.session_state.program_id}')"""
             conn.execute(text(sql))
             conn.commit()
     # set session state saying that database has been updated (for judging screen)
