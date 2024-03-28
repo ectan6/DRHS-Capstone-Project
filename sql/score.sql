@@ -12,6 +12,8 @@ CREATE TABLE main.score (
 	spin_level int4 NULL,
 	user_id int4 NULL,
 	program_id int4 NULL,
+	judge1 int4 NULL,
+	goe float4 NULL,
 	CONSTRAINT score_pk PRIMARY KEY (id)
 );
 
