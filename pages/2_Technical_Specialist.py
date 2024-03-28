@@ -283,8 +283,11 @@ else:
     # If selected element is not the same as the one in state, update it
     st.session_state.selected_element = selected_element
 
+if "sequence_counter" not in st.session_state:
+    st.session_state.sequence_counter = 0
 
 def write_to_database(element_list: list, execution_order: int):
+    sequence_counter = 0
     for element in element_list:
         print("write element to database ", element.element, " ", element.level)
         with engine.connect() as conn:
@@ -296,10 +299,13 @@ def write_to_database(element_list: list, execution_order: int):
                 VALUES('{element.element}', '{execution_order}', '{st.session_state.user_id}', '{st.session_state.program_id}')"""
             conn.execute(text(sql))
             conn.commit()
+        sequence_counter += 1
+        print("sequence counter: ", sequence_counter)
     # set session state saying that database has been updated (for judging screen)
     # set_changed_data(True)
     print("Changing state to true")
     st.session_state.changed_data = True
+    st.session_state.sequence_counter = sequence_counter
 
 
 # If selected element is less than the max, display a button to increment it

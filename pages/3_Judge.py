@@ -39,21 +39,6 @@ st.write("Program: ", st.session_state.program_id)
 c1, c2 = st.columns(2)
 
 
-# print(st.session_state.completed_program_elements)
-
-
-# will probably not be using this function
-def create_new_row(new_element: str):
-    print(st.session_state.completed_program_elements)
-
-    new_row = pd.DataFrame({"Element": [new_element]})
-    st.session_state.completed_program_elements = pd.concat(
-        [st.session_state.completed_program_elements, new_row], ignore_index=True
-    )
-
-    # c1.write(df1, hide_index=False, column_config={'Element': 'Element'})
-
-
 with c1:
     st.write("Completed Program Elements")
 
@@ -64,16 +49,24 @@ with c1:
         print("Getting an update from the DB")
 
         # Create a dummy dataframe for now
-        data = pd.DataFrame({"Element": ["2F"]})
         with engine.connect() as conn:
             # if spin_id is null then the element is a jump
-            latest_element = pd.read_sql(f"SELECT 'jump_id' FROM main.score ORDER BY id DESC LIMIT 3 WHERE program_id = {st.session_state.program_id}", conn)
+            latest_element = pd.read_sql(f"SELECT * FROM main.score WHERE program_id = {st.session_state.program_id} ORDER BY id DESC LIMIT {st.session_state.sequence_counter}", conn)
+            print("latest element")
             print(latest_element)
         # replace 3Lz with readable element 
-        data = data.append({"Element": "3Lz"}, ignore_index=True)
-
-        # Revert the changed_data flag
-        st.session_state.changed_data = False
+        readable_element = ""
+        print(latest_element["jump_id"][0])
+        for i in range(len(latest_element)):
+            # if spin is is null, then add jump
+            if latest_element["spin_id"][i] == None:
+                readable_element += latest_element["jump_id"][i]
+            # if jump id is null, then add level and spin
+            elif latest_element["jump_id"][i] == None:
+                readable_element += latest_element["spin_id"][i] + str(latest_element["spin_level"][i])
+        data = data._append({f"Element": {readable_element}}, ignore_index=True)
+    # Revert the changed_data flag
+    st.session_state.changed_data = False
 
     # displaying dataframe
     st.dataframe(
