@@ -42,34 +42,34 @@ c1, c2 = st.columns(2)
 with c1:
     st.write("Completed Program Elements")
 
-    data = pd.DataFrame({})
+    data = pd.DataFrame({'Element': []})
     if st.session_state.changed_data:
         # Connect to the DB and read in a score for the user_id and program_id
         print("Getting an update from the DB")
 
-        # Create a dummy dataframe for now
         with engine.connect() as conn:
             # if spin_id is null then the element is a jump
-            latest_element = pd.read_sql(f"SELECT * FROM main.score WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY id DESC", conn)
+            program_elements = pd.read_sql(f"SELECT * FROM main.score WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY id DESC", conn)
             print("latest element")
-            print(latest_element)
+            print(program_elements)
         # replace 3Lz with readable element 
         readable_element = ""
-        print(latest_element["jump_id"][0])
-        for i in range(len(latest_element)):
-            # if spin is is null, then add jump
-            if latest_element["spin_id"][i] == None:
-                if i == st.session_state.sequence_counter:
-                    readable_element += latest_element["jump_id"][i]
-                else:
-                    readable_element += latest_element["jump_id"][i] + "+"
-            # if jump id is null, then add level and spin
-            elif latest_element["jump_id"][i] == None:
-                readable_element += latest_element["spin_id"][i] + str(int(latest_element["spin_level"][i]))
-            # can't use append for pd.DataFrame
-                # location (index based) or concat
-            new_row = pd.DataFrame({"Element": readable_element})
-            data = pd.concat([data, new_row], ignore_index=True)
+        print(program_elements["jump_id"][0])
+        # for number of elements completed so far, run row adding loop
+        for i in range(st.session_state.selected_element -1):
+            # need this to be changed to be specific to order_executed 
+            # use st.session_state.sequence_counter for how many in order_executed
+            for i in reversed(range(len(program_elements))):
+                # if spin is is null, then add jump
+                if program_elements["spin_id"][i] == None:
+                    if i == 0:
+                        readable_element += program_elements["jump_id"][i]
+                    else:
+                        readable_element += program_elements["jump_id"][i] + "+"
+                # if jump id is null, then add level and spin
+                elif program_elements["jump_id"][i] == None:
+                    readable_element += program_elements["spin_id"][i] + str(int(program_elements["spin_level"][i]))
+            data.loc[len(data.index)] = [readable_element]
     # Revert the changed_data flag
     st.session_state.changed_data = False
 
