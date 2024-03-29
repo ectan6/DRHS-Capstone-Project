@@ -59,8 +59,9 @@ with engine.connect() as conn:
         FROM main.programs
         WHERE competition_id = {int(comp_id)}
     """
-    st.session_state.program_id = pd.read_sql(query2, conn).iloc[0, 0]
-    print(st.session_state.program_id)
+    # st.session_state.program_id = pd.read_sql(query2, conn).iloc[0, 0]
+    program_id_list = pd.read_sql(query2, conn)
+    print(program_id_list)
 
 
 user_list = st.session_state.available_users.to_dict(orient="records")
@@ -73,6 +74,8 @@ st.session_state.user_id = user_dict["user_id"]
 st.session_state.user_name = user_dict["first_name"] + " " + user_dict["last_name"]
 print(st.session_state.user_name)
 
+# add program selector here
+st.session_state.program_id = st.selectbox("Select a program: ", program_id_list)
 
 menu()  # render dynamic menu
 
