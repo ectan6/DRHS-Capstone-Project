@@ -52,17 +52,13 @@ with engine.connect() as conn:
         JOIN main.users u ON u.user_id = p.user_id 
         WHERE p.competition_id = {int(comp_id)}
     """
-    st.session_state.available_users = pd.read_sql(query, conn)
-    print(st.session_state.available_users)
-    query2 = f"""
-        SELECT program_id
-        FROM main.programs
-        WHERE competition_id = {int(comp_id)}
-    """
-    # st.session_state.program_id = pd.read_sql(query2, conn).iloc[0, 0]
-    program_id_list = pd.read_sql(query2, conn)
-    print(program_id_list)
-
+    total_available_users = pd.read_sql(query, conn)
+    print(total_available_users)
+    # get rid of duplicate users
+    st.session_state.available_users = pd.DataFrame(columns=["user_id", "first_name", "last_name"])
+    for id in total_available_users["user_id"]:
+        if id not in st.session_state.available_users["user_id"]:
+            st.session_state.available_users.loc[len(st.session_state.available_users.index)] = [id,total_available_users.loc[total_available_users["user_id"] == id, "first_name"].values[0], total_available_users.loc[total_available_users["user_id"] == id, "last_name"].values[0]]
 
 user_list = st.session_state.available_users.to_dict(orient="records")
 user_dict = st.selectbox(
@@ -73,6 +69,15 @@ user_dict = st.selectbox(
 st.session_state.user_id = user_dict["user_id"]
 st.session_state.user_name = user_dict["first_name"] + " " + user_dict["last_name"]
 print(st.session_state.user_name)
+
+with engine.connect() as conn:
+    query2 = f"""
+        SELECT program_id
+        FROM main.programs
+        WHERE competition_id = {int(comp_id)} and user_id = {st.session_state.user_id}
+    """
+    program_id_list = pd.read_sql(query2, conn)
+    print(program_id_list)
 
 # add program selector here
 st.session_state.program_id = st.selectbox("Select a program: ", program_id_list)
