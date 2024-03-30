@@ -4,7 +4,7 @@ from menu import menu_with_redirect
 
 # from app import get_changed_data
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -55,20 +55,22 @@ with c1:
         # replace 3Lz with readable element 
         readable_element = ""
         print(program_elements["jump_id"][0])
-        
+
         # for number of elements completed so far, run row adding loop
         for i in range(st.session_state.selected_element -1):
             # need this to be specific to order_executed 
-            # num_in_order_executed = 0
-            # for row in program_elements["order_executed"]:
-            #     if row == i:
-            #         num_in_order_executed += 1
-            # print(num_in_order_executed)
-            # for j in reversed(range(num_in_order_executed)):
-            for j in reversed(range(st.session_state.sequence_counter)):
+            num_in_order_executed = 0
+            for row in program_elements["order_executed"]:
+                if row == i:
+                    num_in_order_executed += 1
+            print(num_in_order_executed)
+
+            for j in reversed(range(num_in_order_executed)):
+            # for j in reversed(range(st.session_state.sequence_counter)):
                 # if program_elements["order_executed"][j] == i:
                 # if spin is is null, then add jump
                 if program_elements["spin_id"][j] == None:
+                    # if last jump, no plus
                     if j == 0:
                         readable_element += program_elements["jump_id"][j]
                     else:
@@ -101,12 +103,18 @@ def create_pcs_sliders(name: str):
     # slider arguments: label, min, max, default, step
     name_value = st.slider(f"{name}:", 0.0, 10.0, 5.0, 0.25)
     st.write("You chose", name_value, f"for {name}")
+    return name_value
 
+skating_skills_score = create_pcs_sliders("skating skills")
+transitions_score = create_pcs_sliders("transitions")
+performance_score = create_pcs_sliders("performance")
+choreography_score = create_pcs_sliders("choreography")
+interpretation_score = create_pcs_sliders("interpretation")
 
-create_pcs_sliders("skating skills")
-create_pcs_sliders("transitions")
-create_pcs_sliders("performance")
-create_pcs_sliders("choreography")
-create_pcs_sliders("interpretation")
-
-st.button("submit", key="submit-judge")
+if st.button("submit pcs", key="submit-judge-pcs"):
+    with engine.connect() as conn:
+        pcs_query = f"""INSERT INTO main.pcs (user_id, program_id, skating_skills, transitions, performance, choreography, interpretation) 
+        VALUES ('{st.session_state.user_id}', '{st.session_state.program_id}', '{skating_skills_score}', '{transitions_score}', '{performance_score}', '{choreography_score}', '{interpretation_score}')"""
+        conn.execute(text(pcs_query))
+        conn.commit()
+        print("Inserted PCS scores")
