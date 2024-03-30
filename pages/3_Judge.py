@@ -50,7 +50,7 @@ with c1:
         with engine.connect() as conn:
             # if spin_id is null then the element is a jump
             program_elements = pd.read_sql(f"SELECT * FROM main.score WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY id DESC", conn)
-            print("latest element")
+            print("program elements:")
             print(program_elements)
         # replace 3Lz with readable element 
         readable_element = ""
@@ -58,18 +58,29 @@ with c1:
         # for number of elements completed so far, run row adding loop
         for i in range(st.session_state.selected_element -1):
             # need this to be changed to be specific to order_executed 
-            # use st.session_state.sequence_counter for how many in order_executed
-            for i in reversed(range(len(program_elements))):
+            num_in_order_executed = 0
+            for row in program_elements["order_executed"]:
+                print("row: ", row)
+                if row == i:
+                    num_in_order_executed += 1
+            print(num_in_order_executed)
+            for j in reversed(range(num_in_order_executed)):
+                print("j: ", j)
+                print("i: ", i)
+                if program_elements["order_executed"][j] == i:
                 # if spin is is null, then add jump
-                if program_elements["spin_id"][i] == None:
-                    if i == 0:
-                        readable_element += program_elements["jump_id"][i]
-                    else:
-                        readable_element += program_elements["jump_id"][i] + "+"
-                # if jump id is null, then add level and spin
-                elif program_elements["jump_id"][i] == None:
-                    readable_element += program_elements["spin_id"][i] + str(int(program_elements["spin_level"][i]))
+                    if program_elements["spin_id"][j] == None:
+                        if j == 0:
+                            readable_element += program_elements["jump_id"][j]
+                        else:
+                            readable_element += program_elements["jump_id"][j] + "+"
+                    # if jump id is null, then add level and spin
+                    elif program_elements["jump_id"][j] == None:
+                        readable_element += program_elements["spin_id"][j] + str(int(program_elements["spin_level"][j]))
+                print(readable_element)
+            print(readable_element)
             data.loc[len(data.index)] = [readable_element]
+            # add to beginning of dataframe bc going backwards
     # Revert the changed_data flag
     st.session_state.changed_data = False
 
