@@ -55,28 +55,27 @@ with c1:
         # replace 3Lz with readable element 
         readable_element = ""
         print(program_elements["jump_id"][0])
+        
         # for number of elements completed so far, run row adding loop
         for i in range(st.session_state.selected_element -1):
-            # need this to be changed to be specific to order_executed 
-            num_in_order_executed = 0
-            for row in program_elements["order_executed"]:
-                print("row: ", row)
-                if row == i:
-                    num_in_order_executed += 1
-            print(num_in_order_executed)
-            for j in reversed(range(num_in_order_executed)):
-                print("j: ", j)
-                print("i: ", i)
-                if program_elements["order_executed"][j] == i:
+            # need this to be specific to order_executed 
+            # num_in_order_executed = 0
+            # for row in program_elements["order_executed"]:
+            #     if row == i:
+            #         num_in_order_executed += 1
+            # print(num_in_order_executed)
+            # for j in reversed(range(num_in_order_executed)):
+            for j in reversed(range(st.session_state.sequence_counter)):
+                # if program_elements["order_executed"][j] == i:
                 # if spin is is null, then add jump
-                    if program_elements["spin_id"][j] == None:
-                        if j == 0:
-                            readable_element += program_elements["jump_id"][j]
-                        else:
-                            readable_element += program_elements["jump_id"][j] + "+"
-                    # if jump id is null, then add level and spin
-                    elif program_elements["jump_id"][j] == None:
-                        readable_element += program_elements["spin_id"][j] + str(int(program_elements["spin_level"][j]))
+                if program_elements["spin_id"][j] == None:
+                    if j == 0:
+                        readable_element += program_elements["jump_id"][j]
+                    else:
+                        readable_element += program_elements["jump_id"][j] + "+"
+                # if jump id is null, then add level and spin
+                elif program_elements["jump_id"][j] == None:
+                    readable_element += program_elements["spin_id"][j] + str(int(program_elements["spin_level"][j]))
                 print(readable_element)
             print(readable_element)
             data.loc[len(data.index)] = [readable_element]
