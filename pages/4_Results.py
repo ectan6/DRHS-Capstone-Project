@@ -38,3 +38,35 @@ with c5:
 st.divider()
 # dataframe = pd.DataFrame({'Element': [], 'Base Value': [], 'GOE': [], 'Score': []})
 # WAITTTT MAYBE i can just (when inserting into score database) insert into readable_elment and then we r chilling
+
+with engine.connect() as conn:
+    judge_table = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
+    pcs_table = pd.read_sql(f"SELECT * FROM main.pcs WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id}", conn)
+st.dataframe(
+    judge_table,
+    hide_index=True,
+    column_config={
+        "id": None,
+        "user_id": None,
+        "program_id": None,
+        "order_executed": "#",
+        "element": "Element"
+        },
+)
+# rn: showing the judge df. need to add in the base value, goe, judge score(s), and ref score of panel
+
+# then df for pcs
+st.dataframe(
+    pcs_table,
+    hide_index=True,
+    column_config={
+        "id": None,
+        "user_id": None,
+        "program_id": None,
+        "skating_skills": "Skating Skills",
+        "transitions": "Transitions",
+        "performance": "Performance",
+        "choreography": "Choreography",
+        "interpretation": "Interpretation"
+        },
+)
