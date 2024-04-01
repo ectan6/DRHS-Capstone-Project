@@ -300,29 +300,17 @@ def write_to_database(element_list: list, execution_order: int):
             conn.execute(text(sql))
             conn.commit()
         sequence_counter += 1
-        print("sequence counter: ", sequence_counter)
-    # set session state saying that database has been updated (for judging screen)
-    # set_changed_data(True)
+        # print("sequence counter: ", sequence_counter)
+    with engine.connect() as conn:
+        sql2 = f"""
+            INSERT INTO main.readable_elements(user_id, program_id, element)
+            VALUES('{st.session_state.user_id}', '{st.session_state.program_id}', '{element_string}')
+        """
+        conn.execute(text(sql2))
+        conn.commit()
     print("Changing state to true")
     st.session_state.changed_data = True
     st.session_state.sequence_counter = sequence_counter
-
-
-# If selected element is less than the max, display a button to increment it
-if st.session_state.selected_element < MAX_ELEMENTS:
-    # Create a button to increment the selected element
-    if st.button("Increment Element", use_container_width=True):
-        if "modal_selected_element" in st.session_state:
-            st.session_state.modal_selected_element += 1
-        else:
-            st.session_state.modal_selected_element = 2
-        row = st.session_state.completed_elements.iloc[selected_element - 1]
-        write_to_database(row["element_list"], row["execution_order"])
-        st.rerun()
-else:
-    if st.button("Submit", use_container_width=True):
-        row = st.session_state.completed_elements.iloc[selected_element - 1]
-        write_to_database(row["element_list"], row["execution_order"])
 
 base_data = {
     "execution_order": [i for i in range(1, MAX_ELEMENTS + 1)],
@@ -340,6 +328,23 @@ element_column = st.session_state.completed_elements["element_list"][
     selected_element - 1
 ]
 element_string = "+".join(element.print_element() for element in element_column)
+# print(element_string)
+
+# If selected element is less than the max, display a button to increment it
+if st.session_state.selected_element < MAX_ELEMENTS:
+    # Create a button to increment the selected element
+    if st.button("Increment Element", use_container_width=True):
+        if "modal_selected_element" in st.session_state:
+            st.session_state.modal_selected_element += 1
+        else:
+            st.session_state.modal_selected_element = 2
+        row = st.session_state.completed_elements.iloc[selected_element - 1]
+        write_to_database(row["element_list"], row["execution_order"])
+        st.rerun()
+else:
+    if st.button("Submit", use_container_width=True):
+        row = st.session_state.completed_elements.iloc[selected_element - 1]
+        write_to_database(row["element_list"], row["execution_order"])
 
 # Update the dataframe with the new element
 st.session_state.completed_elements.loc[selected_element - 1, "element_string"] = (
