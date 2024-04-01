@@ -291,8 +291,8 @@ def write_to_database(element_list: list, execution_order: int):
         # print("sequence counter: ", sequence_counter)
     with engine.connect() as conn:
         sql2 = f"""
-            INSERT INTO main.readable_elements(user_id, program_id, element)
-            VALUES('{st.session_state.user_id}', '{st.session_state.program_id}', '{element_string}')
+            INSERT INTO main.readable_elements(user_id, program_id, element, order_executed)
+            VALUES('{st.session_state.user_id}', '{st.session_state.program_id}', '{element_string}', '{execution_order}')
         """
         conn.execute(text(sql2))
         conn.commit()
