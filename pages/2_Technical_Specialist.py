@@ -56,18 +56,6 @@ def click_button(jump_id: str, spin_id: str, spin_level: int):
             st.session_state.selected_element - 1, "element_list"
         ].append(Element(spin_id, spin_level))
 
-
-# If there is a user id, then find its location in the available users list
-# if "user_id" in st.session_state:
-#     for i, user in enumerate(st.session_state.available_users):
-#         if user["user_id"] == st.session_state.user_id:
-#             st.session_state.user_index = i
-
-# user_dict = st.selectbox("Select a user: ", st.session_state.available_users, format_func=lambda x: x["first_name"] + " " + x["last_name"], index=st.session_state.user_index)
-
-# if user_dict:
-#     st.session_state.user_id = user_dict["user_id"]
-
 st.write("Competitor: ", st.session_state.user_name)
 st.write("Program: ", st.session_state.program_id)
 
