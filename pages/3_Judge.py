@@ -26,7 +26,7 @@ st.title("judge screen")
 st.write("Juding for", st.session_state.user_name)
 st.write("Program: ", st.session_state.program_id)
 
-c1, c2 = st.columns(2)
+c1, c2 = st.columns([0.2, 0.8])
 
 
 with c1:
@@ -41,8 +41,6 @@ with c1:
 
         with engine.connect() as conn:
             data = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
-    # Revert the changed_data flag
-    st.session_state.changed_data = False
 
     # displaying dataframe
     st.dataframe(
@@ -60,6 +58,20 @@ with c1:
 with c2:
     st.write("Grade of Execution")
     # add buttons - will use a function
+    def add_goe_buttons():
+        goe_buttons = st.columns(11)
+        for i in range(11):
+            with goe_buttons[i]:
+                st.button(label=str(i-5), key=f"goe-{i}")
+
+    if st.session_state.changed_data:
+        print("data changed")
+        # new row of goe buttons
+        add_goe_buttons()
+    
+    # Revert the changed_data flag
+    st.session_state.changed_data = False
+        
 
 st.divider()
 
