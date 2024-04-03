@@ -33,7 +33,19 @@ if "first_jump" not in st.session_state:
     st.session_state.first_jump = first_jump
 
 if "expander_label" not in st.session_state:
-    st.session_state.expander_label = "1"
+    st.session_state.expander_label = ""
+if "combo_index" not in st.session_state:  
+    st.session_state.combo_index = 1
+
+def update_expander_label(code: str):
+    if st.session_state.combo_index == 1:
+        st.session_state.expander_label = code
+        print(f"expander label is {st.session_state.expander_label}")
+    else: 
+        st.session_state.expander_label += f" + {code}"
+        print(f"expander label is {st.session_state.expander_label} +")
+    # i worked for like 30 mins 4/2/24
+    st.session_state.combo_index += 1
 
 
 def write_to_ppc_table(code: str, order: int):
@@ -46,28 +58,32 @@ def write_to_ppc_table(code: str, order: int):
 
 
 def create_jump_buttons(num_rotations: int, element_number: int):
-    if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}"):
-        write_to_ppc_table(f"{num_rotations}T", element_number)
-        st.session_state.exapnder_label += f"{num_rotations}toe-{element_number}"
+    code = ""
+    # , on_click=
+    if st.button(label=str(num_rotations), key=f"{num_rotations}toe-{element_number}", on_click=update_expander_label(f"{num_rotations}T")):
+        code = f"{num_rotations}T"
+        write_to_ppc_table(code, element_number)
+        # st.session_state.exapnder_label += f"{num_rotations}toe-{element_number}"
+
     if st.button(label=str(num_rotations), key=f"{num_rotations}sal-{element_number}"):
-        write_to_ppc_table(f"{num_rotations}S", element_number)
-        # return f"{num_rotations}sal-{element_number}"
+        code = f"{num_rotations}S"
+        write_to_ppc_table(code, element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}loop-{element_number}"):
-        write_to_ppc_table(f"{num_rotations}Lo", element_number)
-        # return f"{num_rotations}loop-{element_number}"
+        code = f"{num_rotations}Lo"
+        write_to_ppc_table(code, element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}flip-{element_number}"):
-        write_to_ppc_table(f"{num_rotations}F", element_number)
-        # return f"{num_rotations}flip-{element_number}"
+        code = f"{num_rotations}F"
+        write_to_ppc_table(code, element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}lz-{element_number}"):
-        write_to_ppc_table(f"{num_rotations}Lz", element_number)
-        # return f"{num_rotations}lz-{element_number}"
+        code = f"{num_rotations}Lz"
+        write_to_ppc_table(code, element_number)
     if st.button(label=str(num_rotations), key=f"{num_rotations}axel-{element_number}"):
-        write_to_ppc_table(f"{num_rotations}A", element_number)
-        # return f"{num_rotations}axel-{element_number}"
+        code = f"{num_rotations}A"
+        write_to_ppc_table(code, element_number)
     if st.session_state.first_jump == True:
         if st.button(label=str(num_rotations), key=f"{num_rotations}eu-{element_number}"):
-            write_to_ppc_table(f"{num_rotations}Eu", element_number)
-            # return f"{num_rotations}eu-{element_number}"
+            code = f"{num_rotations}Eu"
+            write_to_ppc_table(code, element_number)
 
 
 def create_spin_buttons(variation: int, element_number: int):
@@ -151,6 +167,7 @@ def ppc_options(element_number: int):
 for i in range(1, 8):
     st.session_state.expander_label = f"{i}"
     with st.expander(st.session_state.expander_label):
+        st.session_state.combo_index = 1
         ppc_options(i)
 
 
