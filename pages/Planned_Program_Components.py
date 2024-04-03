@@ -33,19 +33,20 @@ if "first_jump" not in st.session_state:
     st.session_state.first_jump = first_jump
 
 if "expander_label" not in st.session_state:
-    st.session_state.expander_label = ""
+    st.session_state.expander_label = []
 if "combo_index" not in st.session_state:  
     st.session_state.combo_index = 1
 
-def update_expander_label(code: str):
-    # if st.session_state.combo_index == 1:
-    #     st.session_state.expander_label = code
-    #     print(f"expander label is {st.session_state.expander_label}")
-    # else: 
-    st.session_state.expander_label += f" + {code}"
-    print(f"expander label is {st.session_state.expander_label} +")
-    # i worked for like 30 mins 4/2/24
-    st.session_state.combo_index += 1
+# def update_expander_label(code: str):
+#     # if st.session_state.combo_index == 1:
+#     #     st.session_state.expander_label = code
+#     #     print(f"expander label is {st.session_state.expander_label}")
+#     # else:
+#     print("expander label") 
+#     print(st.session_state.expander_label)
+#     st.session_state.expander_label.append(code)
+#     print(st.session_state.expander_label)
+#     st.session_state.combo_index += 1
 
 
 def write_to_ppc_table(code: str, order: int):
@@ -64,7 +65,6 @@ def create_jump_buttons(num_rotations: int, element_number: int):
         code = f"{num_rotations}T"
         write_to_ppc_table(code, element_number)
         # st.session_state.exapnder_label += f"{num_rotations}toe-{element_number}"
-
     if st.button(label=str(num_rotations), key=f"{num_rotations}sal-{element_number}", on_click=update_expander_label, args=[f"{num_rotations}S"]):
         code = f"{num_rotations}S"
         write_to_ppc_table(code, element_number)
@@ -165,8 +165,8 @@ def ppc_options(element_number: int):
 # when the user selects an element - use some function
 
 for i in range(1, 8):
-    st.session_state.expander_label = f"{i}"
-    with st.expander(st.session_state.expander_label):
+    st.session_state.expander_label = [f"{i}"]
+    with st.expander(st.session_state.expander_label[0]):
         st.session_state.combo_index = 1
         ppc_options(i)
 
