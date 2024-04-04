@@ -4,17 +4,17 @@ import streamlit as st
 def authenticated_menu():
     # Show a navigation menu for authenticated users
     st.sidebar.page_link("app.py", label="Switch accounts")
-    st.sidebar.page_link("pages/user.py", label="Your profile")
+    # st.sidebar.page_link("pages/user.py", label="Your profile")
     st.sidebar.page_link("pages/Planned_Program_Components.py", label="Planned Program Components")
-    if st.session_state.role in ["admin", "super-admin"]:
+    if st.session_state.role in ["technical specialist", "judge"]:
         st.sidebar.page_link("pages/2_Technical_Specialist.py", label="Tech Specialist")
         st.sidebar.page_link("pages/3_Judge.py", label="Judge")
-        st.sidebar.page_link("pages/4_Results.py", label="Results")
-        st.sidebar.page_link(
-            "pages/super-admin.py",
-            label="Manage admin access",
-            disabled=st.session_state.role != "super-admin",
-        )
+    st.sidebar.page_link("pages/4_Results.py", label="Results")
+        # st.sidebar.page_link(
+        #     "pages/super-admin.py",
+        #     label="Manage admin access",
+        #     disabled=st.session_state.role != "super-admin",
+        # )
 
 
 def unauthenticated_menu():

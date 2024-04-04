@@ -16,7 +16,7 @@ engine = create_engine(
     f"postgresql+psycopg2://postgres:{postgres_password}@localhost:5432/{database_name}"
 )
 
-if st.session_state.role not in ["admin", "super-admin"]:
+if st.session_state.role not in ["technical specialist", "judge"]:
     st.warning("You do not have permission to view this page.")
     st.stop()
 st.title("judge screen")

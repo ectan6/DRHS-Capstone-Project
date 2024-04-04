@@ -39,7 +39,7 @@ class Element:
 
 
 menu_with_redirect()
-if st.session_state.role not in ["admin", "super-admin"]:
+if st.session_state.role not in ["technical specialist", "judge"]:
     st.warning("You do not have permission to view this page.")
     st.stop()
 

@@ -15,9 +15,9 @@ engine = create_engine(
     f"postgresql+psycopg2://postgres:{postgres_password}@localhost:5432/{database_name}"
 )
 
-if st.session_state.role not in ["admin", "super-admin"]:
-    st.warning("You do not have permission to view this page.")
-    st.stop()
+# if st.session_state.role not in ["admin", "super-admin"]:
+#     st.warning("You do not have permission to view this page.")
+#     st.stop()
 
 with engine.connect() as conn:
     # get date from main.competitions "date" column

@@ -33,7 +33,7 @@ with c2:
 # selectbox to choose role
 st.selectbox(
     "Select your role:",
-    [None, "user", "admin", "super-admin"],
+    [None, "competitor", "technical specialist", "judge"],
     key="_role",
     on_change=set_role,
 )
