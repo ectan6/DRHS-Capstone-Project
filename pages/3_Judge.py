@@ -1,8 +1,6 @@
+import time
 import streamlit as st
 from menu import menu_with_redirect
-# from apscheduler.schedulers.background import BackgroundScheduler
-
-# from app import get_changed_data
 import pandas as pd
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
@@ -58,19 +56,30 @@ with c1:
 with c2:
     st.write("Grade of Execution")
     # add buttons - will use a function
-    def add_goe_buttons():
+    def add_goe_buttons(row_num: int):
         goe_buttons = st.columns(11)
         for i in range(11):
             with goe_buttons[i]:
-                st.button(label=str(i-5), key=f"goe-{i}")
+                if st.button(label=str(i-5), key=f"goe-{i}-row-{row_num}"):
+                    # print(f"goe-{i}-row-{row_num}")
+                    with engine.connect() as conn:
+                        goe_query = f"""
+                            INSERT INTO main.judge_goe (user_id, program_id, element_number, judge_1)
+                            VALUES ('{st.session_state.user_id}', '{st.session_state.program_id}', '{row_num+1}', '{i-5}')
+                        """
+                        # goe_query = f"""UPDATE main.score SET goe = {i-5} WHERE user_id = {st.session_state.user_id} AND program_id = {st.session_state.program_id} AND order_executed = {row_num+1}"""
+                        conn.execute(text(goe_query))
+                        conn.commit()
+                        print("Updated GOE")
 
     if st.session_state.changed_data:
         print("data changed")
         # new row of goe buttons
-        add_goe_buttons()
-    
-    # Revert the changed_data flag
-    st.session_state.changed_data = False
+        # print(st.session_state.to_dict())
+        add_goe_buttons(st.session_state.selected_element - 1)
+        # Revert the changed_data flag
+        time.sleep(3)
+        st.session_state.changed_data = False
         
 
 st.divider()
