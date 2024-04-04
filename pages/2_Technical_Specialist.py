@@ -8,7 +8,7 @@ load_dotenv()
 import os
 import pandas as pd
 from streamlit_modal import Modal
-import time
+# import time
 
 # from Planned_Program_Components import create_jump_buttons
 # from app import set_changed_data
@@ -43,7 +43,7 @@ if st.session_state.role not in ["admin", "super-admin"]:
     st.warning("You do not have permission to view this page.")
     st.stop()
 
-st.title("tech specialist screen")
+st.title("Technical Specialist Screen")
 
 # function for adding elements to the score table in the database
 def click_button(jump_id: str, spin_id: str, spin_level: int):
@@ -65,15 +65,21 @@ col1, col2 = st.columns(2)
 # jumps column
 with col1:
     # nest jump columns in here
-    st.write("jumps")
+    st.subheader("jumps")
     c1, c2, c3, c4, c5 = st.columns(spec=[0.32, 0.17, 0.17, 0.17, 0.17])
     with c1:
         st.write("Toeloop")
+        st.write("")
         st.write("Salchow")
+        st.write("")
         st.write("Loop")
+        st.write("")
         st.write("Flip")
+        st.write("")
         st.write("Lutz")
+        st.write("")
         st.write("Axel")
+        st.write("")
         st.write("Euler")
     with c2:
         # create_jump_buttons(1, 1)
@@ -165,13 +171,17 @@ if modal.is_open():
 
 # spins and steps column
 with col2:
-    st.write("spins")
+    st.subheader("spins")
     c6, c7, c8, c9 = st.columns(4)
     with c6:
         st.write("Upright")
+        st.write("")
         st.write("Layback")
+        st.write("")
         st.write("Camel")
+        st.write("")
         st.write("Sit")
+        st.write("")
         st.write("Combo")
     with c7:
         if st.button(label="✓", key="us"):
@@ -224,12 +234,11 @@ with col2:
 
     # -------------
 
-    st.write("")
-    st.write("sequences")
-    c11, c12, c13, c14, c15, c16 = st.columns(6)
+    st.subheader("sequences")
+    c11, c12, c13, c14, c15, c16 = st.columns([0.24, 0.12, 0.12, 0.12, 0.12, 0.12])
     with c11:
-        st.write("step")
-        st.write("choreo")
+        st.write("Step")
+        st.write("Choreo")
     with c12:
         if st.button(label="B", key="0step"):
             click_button("", "StSq", 0)
@@ -249,9 +258,10 @@ with col2:
         if st.button(label="4", key="4step"):
             click_button("", "StSq", 4)
 
+st.divider()
 
 # completed elements table
-st.write("completed elements table")
+st.subheader("completed elements table")
 
 if "modal_selected_element" in st.session_state:
     selected_element = st.selectbox(

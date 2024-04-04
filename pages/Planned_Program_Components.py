@@ -19,8 +19,14 @@ if st.session_state.role not in ["admin", "super-admin"]:
     st.warning("You do not have permission to view this page.")
     st.stop()
 
+with engine.connect() as conn:
+    # get date from main.competitions "date" column
+    sql = f"SELECT * FROM main.competitions WHERE competition_id = {st.session_state.competition_id}"
+    competition_data = pd.read_sql(sql, conn)
+    competition_date = competition_data["date"].values[0]
+
 st.title(f"Planned Program Components for {st.session_state.user_name}")
-st.title(f"Event: {st.session_state.competition_name} - date, time")
+st.subheader(f"Event: {st.session_state.competition_name} on {competition_date}")
 
 # something to consider: multiple tabs for multiple programs (short and long) ?
 # t1, t2 = st.tabs(["short program", "long program"])
@@ -92,18 +98,24 @@ def create_spin_buttons(variation: int, element_number: int):
 
 
 def ppc_options(element_number: int):
-    st.write("these are the element options")
-    c1, c2, c3 = st.columns(3)
+    # st.write("these are the element options")
+    c1, c2, c3 = st.columns([.4, .375, .25])
     with c1:
-        st.write("jumps")
-        c4, c5, c6, c7, c8 = st.columns(5)
+        st.subheader("jumps")
+        c4, c5, c6, c7, c8 = st.columns([.25, .15, .15, .15, .15])
         with c4:
             st.write("Toeloop")
+            st.write("")
             st.write("Salchow")
+            st.write("")
             st.write("Loop")
+            st.write("")
             st.write("Flip")
+            st.write("")
             st.write("Lutz")
+            st.write("")
             st.write("Axel")
+            st.write("")
             st.write("Euler")
         with c5:
             st.session_state.first_jump = True
@@ -117,14 +129,18 @@ def ppc_options(element_number: int):
             create_jump_buttons(4, element_number)
 
     with c2:
-        st.write("spins")
+        st.subheader("spins")
         # could change all to checkboxes and implement logic like if (fly and upright) then code FUSp
-        c9, c10, c11, c12 = st.columns(4)
+        c9, c10, c11, c12 = st.columns([.35, .15, .15, .15])
         with c9:
             st.write("Upright")
+            st.write("")
             st.write("Layback")
+            st.write("")
             st.write("Camel")
+            st.write("")
             st.write("Sit")
+            st.write("")
             st.write("Combination")
         with c10:
             create_spin_buttons(1, element_number)
@@ -134,10 +150,10 @@ def ppc_options(element_number: int):
             create_spin_buttons(3, element_number)
 
     with c3:
-        st.write("Sequences")
-        if st.button(label="Step Sequence", key=f"stsq{element_number}"):
+        st.subheader("sequences")
+        if st.button(label="Step Sequence", key=f"stsq{element_number}", use_container_width=True):
             write_to_ppc_table("StSq", element_number)
-        if st.button(label="Choreographic Sequence", key=f"chsq{element_number}"):
+        if st.button(label="Choreographic Sequence", key=f"chsq{element_number}", use_container_width=True):
             write_to_ppc_table("ChSq", element_number)
     
     print(ppc_i)
@@ -150,7 +166,7 @@ def ppc_options(element_number: int):
 # when the user selects an element - use some function
 
 for i in range(1, 8):
-    with st.expander(f"{i}"):
+    with st.expander(f"Element {i}"):
         ppc_i = []
         ppc_options(i)
 

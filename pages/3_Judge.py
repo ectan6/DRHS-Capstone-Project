@@ -60,7 +60,7 @@ with c2:
         goe_buttons = st.columns(11)
         for i in range(11):
             with goe_buttons[i]:
-                if st.button(label=str(i-5), key=f"goe-{i}-row-{row_num}"):
+                if st.button(label=str(i-5), key=f"goe-{i}-row-{row_num}", use_container_width=True):
                     # print(f"goe-{i}-row-{row_num}")
                     with engine.connect() as conn:
                         goe_query = f"""
@@ -76,7 +76,9 @@ with c2:
         print("data changed")
         # new row of goe buttons
         # print(st.session_state.to_dict())
-        add_goe_buttons(st.session_state.selected_element - 1)
+        for i in range(st.session_state.selected_element):
+            add_goe_buttons(i)
+        # add_goe_buttons(st.session_state.selected_element - 1)
         # Revert the changed_data flag
         time.sleep(3)
         st.session_state.changed_data = False
