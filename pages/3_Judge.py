@@ -68,8 +68,8 @@ with c2:
         goe_buttons = st.columns([.1, .1, .1, .1, .1, .083, .083, .083, .083, .083, .083])
         for i in range(11):
             with goe_buttons[i]:
-                if st.button(label=str(i-5), key=f"goe-{i}-row-{row_num}", use_container_width=True):
-                    # print(f"goe-{i}-row-{row_num}")
+                if st.button(label=str(i-5), key=f"goe-{i}-row-{row_num}"):
+                    print(f"goe-{i}-row-{row_num}")
                     with engine.connect() as conn:
                         goe_query = f"""
                             INSERT INTO main.judge_goe (user_id, program_id, element_number, judge_1)
@@ -85,7 +85,7 @@ with c2:
         # new row of goe buttons
         # print(st.session_state.to_dict())
         for i in range(st.session_state.selected_element -1):
-            add_goe_buttons(i)
+            add_goe_buttons(i+1)
         # add_goe_buttons(st.session_state.selected_element - 1)
         # Revert the changed_data flag
         time.sleep(3)
