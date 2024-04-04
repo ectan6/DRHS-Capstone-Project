@@ -43,6 +43,8 @@ with c1:
         with engine.connect() as conn:
             data = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
             styled_data = data.style.set_properties(**{'height': row_height})
+    
+    # st.write(styled_data, unsafe_allow_html=True)  
 
     # displaying dataframe
     st.dataframe(
