@@ -42,14 +42,15 @@ with c1:
 
         with engine.connect() as conn:
             data = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
-            styled_data = data.style.set_properties(**{'height': row_height})
-            
+            # styled_data = data.style.set_properties(**{'height': row_height})
+
+
     # styling not working for some reason? 
     # st.write(styled_data, unsafe_allow_html=True)  
 
     # displaying dataframe
     st.dataframe(
-        styled_data,
+        data,
         hide_index=True,
         column_config={
             "id": None,
@@ -69,24 +70,26 @@ with c2:
         goe_buttons = st.columns([.1, .1, .1, .1, .1, .083, .083, .083, .083, .083, .083])
         for i in range(11):
             with goe_buttons[i]:
+                print("creating button", i-5)
                 if st.button(label=str(i-5), key=f"goe-{i}-row-{row_num}"):
                     print(f"goe-{i}-row-{row_num}")
                     with engine.connect() as conn:
+                        print("Connected to DB")
                         goe_query = f"""
                             INSERT INTO main.judge_goe (user_id, program_id, element_number, judge_1)
-                            VALUES ('{st.session_state.user_id}', '{st.session_state.program_id}', '{row_num+1}', '{i-5}')
+                            VALUES ('{st.session_state.user_id}', '{st.session_state.program_id}', '{row_num}', '{i-5}')
                         """
                         conn.execute(text(goe_query))
                         conn.commit()
                         print("Updated GOE")
+                        st.session_state.changed_data = False
 
     if st.session_state.changed_data:
         print("data changed")
-        for i in range(st.session_state.selected_element -1):
-            add_goe_buttons(i+1)
-        # Revert the changed_data flag
-        time.sleep(3)
-        st.session_state.changed_data = False
+        for j in range(st.session_state.selected_element -1):
+            print(j+1)
+            add_goe_buttons(j+1)
+        print("done")
         
 
 st.divider()
