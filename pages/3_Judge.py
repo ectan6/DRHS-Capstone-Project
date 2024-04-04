@@ -28,21 +28,25 @@ c1, c2 = st.columns([0.2, 0.8])
 
 
 with c1:
-    st.write("Completed Program Elements")
+    st.write("Program Elements")
 
     # df = st.dataframe(pd.DataFrame({'Element': []}))
     data = pd.DataFrame({'Element': []})
+    styled_data = pd.DataFrame({'Element': []})
                  
     if st.session_state.changed_data:
         # Connect to the DB and read in a score for the user_id and program_id
         print("Getting an update from the DB")
 
+        row_height = '100px'
+
         with engine.connect() as conn:
             data = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
+            styled_data = data.style.set_properties(**{'height': row_height})
 
     # displaying dataframe
     st.dataframe(
-        data,
+        styled_data,
         hide_index=True,
         column_config={
             "id": None,
@@ -55,9 +59,11 @@ with c1:
 
 with c2:
     st.write("Grade of Execution")
+    st.write("")
+    st.write("")
     # add buttons - will use a function
     def add_goe_buttons(row_num: int):
-        goe_buttons = st.columns(11)
+        goe_buttons = st.columns([.1, .1, .1, .1, .1, .083, .083, .083, .083, .083, .083])
         for i in range(11):
             with goe_buttons[i]:
                 if st.button(label=str(i-5), key=f"goe-{i}-row-{row_num}", use_container_width=True):
@@ -76,7 +82,7 @@ with c2:
         print("data changed")
         # new row of goe buttons
         # print(st.session_state.to_dict())
-        for i in range(st.session_state.selected_element):
+        for i in range(st.session_state.selected_element -1):
             add_goe_buttons(i)
         # add_goe_buttons(st.session_state.selected_element - 1)
         # Revert the changed_data flag
