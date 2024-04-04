@@ -43,7 +43,8 @@ with c1:
         with engine.connect() as conn:
             data = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
             styled_data = data.style.set_properties(**{'height': row_height})
-    
+            
+    # styling not working for some reason? 
     # st.write(styled_data, unsafe_allow_html=True)  
 
     # displaying dataframe
@@ -75,18 +76,14 @@ with c2:
                             INSERT INTO main.judge_goe (user_id, program_id, element_number, judge_1)
                             VALUES ('{st.session_state.user_id}', '{st.session_state.program_id}', '{row_num+1}', '{i-5}')
                         """
-                        # goe_query = f"""UPDATE main.score SET goe = {i-5} WHERE user_id = {st.session_state.user_id} AND program_id = {st.session_state.program_id} AND order_executed = {row_num+1}"""
                         conn.execute(text(goe_query))
                         conn.commit()
                         print("Updated GOE")
 
     if st.session_state.changed_data:
         print("data changed")
-        # new row of goe buttons
-        # print(st.session_state.to_dict())
         for i in range(st.session_state.selected_element -1):
             add_goe_buttons(i+1)
-        # add_goe_buttons(st.session_state.selected_element - 1)
         # Revert the changed_data flag
         time.sleep(3)
         st.session_state.changed_data = False
@@ -96,7 +93,6 @@ st.divider()
 
 
 def create_pcs_sliders(name: str):
-    # slider arguments: label, min, max, default, step
     name_value = st.slider(f"{name}:", 0.0, 10.0, 5.0, 0.25)
     st.write("You chose", name_value, f"for {name}")
     return name_value

@@ -36,12 +36,16 @@ with c5:
     st.write("Total Deductions")
 
 st.divider()
-# dataframe = pd.DataFrame({'Element': [], 'Base Value': [], 'GOE': [], 'Score': []})
-# WAITTTT MAYBE i can just (when inserting into score database) insert into readable_elment and then we r chilling
 
 with engine.connect() as conn:
     judge_table = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
     pcs_table = pd.read_sql(f"SELECT * FROM main.pcs WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id}", conn)
+
+    goe_table = pd.read_sql(f"SELECT * FROM main.judge_goe WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id}", conn)
+    goes = goe_table["goe"].values
+    print(goes)
+
+
 st.dataframe(
     judge_table,
     hide_index=True,
