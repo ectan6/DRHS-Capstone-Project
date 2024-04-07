@@ -360,5 +360,5 @@ st.dataframe(
     },
 )
 
-if st.button("submit", key="submit-techspecialist"):
-    st.snow()
+# if st.button("submit", key="submit-techspecialist"):
+    # st.snow()
