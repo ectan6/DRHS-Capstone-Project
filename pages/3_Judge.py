@@ -41,24 +41,24 @@ with c1:
         with engine.connect() as conn:
             data = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
             # styled_data = data.style.set_properties(**{'height': 100px})
-            styled_data = data.style.set_table_styles([{"selector": "tr", "props": "line-height: 100px;"}])
-
-
-    # styling not working for some reason? 
-    # st.write(styled_data, unsafe_allow_html=True)  
+            # styled_data = data.style.set_table_styles([{"selector": "tr", "props": "line-height: 100px;"}])
+        
+    styled_data_html = data.to_html(classes="styled-data")
+    styled_data_html_with_css = f'<style>table tr {{ height: 100px; }}</style>{styled_data_html}'
+    st.write(styled_data_html_with_css, unsafe_allow_html=True)
 
     # displaying dataframe
-    st.dataframe(
-        styled_data,
-        hide_index=True,
-        column_config={
-            "id": None,
-            "user_id": None,
-            "program_id": None,
-            "order_executed": "#",
-            "element": "Element"
-            },
-    )
+    # st.dataframe(
+    #     styled_data,
+    #     hide_index=True,
+    #     column_config={
+    #         "id": None,
+    #         "user_id": None,
+    #         "program_id": None,
+    #         "order_executed": "#",
+    #         "element": "Element"
+    #         },
+    # )
 
 with c2:
     st.write("Grade of Execution")
