@@ -344,12 +344,13 @@ else:
         row = st.session_state.completed_elements.iloc[selected_element - 1]
         write_to_database(row["element_list"], row["execution_order"])
 
+def highlight(row):
+    return ["background-color: #A7E5F8" if row.name == selected_element - 1 else ""] * len(row)
+
 # Update the dataframe with the new element
-st.session_state.completed_elements.loc[selected_element - 1, "element_string"] = (
-    element_string
-)
+st.session_state.completed_elements.loc[selected_element - 1, "element_string"] = (element_string)
 st.dataframe(
-    st.session_state.completed_elements.drop(columns=["element_list"]),
+    st.session_state.completed_elements.drop(columns=["element_list"]).style.apply(highlight, axis=1),
     hide_index=True,
     use_container_width=True,
     column_config={
@@ -361,14 +362,3 @@ st.dataframe(
 
 if st.button("submit", key="submit-techspecialist"):
     st.snow()
-
-
-# streamlit example for highlighting dataframe: ---------
-
-# import streamlit as st
-# import pandas as pd
-# import numpy as np
-
-# df = pd.DataFrame(np.random.randn(10, 20), columns=("col %d" % i for i in range(20)))
-
-# st.dataframe(df.style.highlight_max(axis=0))
