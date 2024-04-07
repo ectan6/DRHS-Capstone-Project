@@ -38,11 +38,10 @@ with c1:
         # Connect to the DB and read in a score for the user_id and program_id
         print("Getting an update from the DB")
 
-        row_height = '100px'
-
         with engine.connect() as conn:
             data = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
-            # styled_data = data.style.set_properties(**{'height': row_height})
+            # styled_data = data.style.set_properties(**{'height': 100px})
+            styled_data = data.style.set_table_styles([{"selector": "tr", "props": "line-height: 100px;"}])
 
 
     # styling not working for some reason? 
@@ -50,7 +49,7 @@ with c1:
 
     # displaying dataframe
     st.dataframe(
-        data,
+        styled_data,
         hide_index=True,
         column_config={
             "id": None,
