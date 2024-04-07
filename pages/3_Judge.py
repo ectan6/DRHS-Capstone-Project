@@ -65,7 +65,6 @@ with c2:
     st.write("Grade of Execution")
     st.write("")
     st.write("")
-    # add buttons - will use a function
     def add_goe_buttons(row_num: int):
         goe_buttons = st.columns([.1, .1, .1, .1, .1, .083, .083, .083, .083, .083, .083])
         for i in range(11):
@@ -92,12 +91,23 @@ with c2:
         print("done")
         
 
-st.divider()
+st.divider() #--------------------------------------------------------
 
+st.subheader("Program Component Scores")
+
+c1, c2 = st.columns([0.9, 0.1])
 
 def create_pcs_sliders(name: str):
-    name_value = st.slider(f"{name}:", 0.0, 10.0, 5.0, 0.25)
-    st.write("You chose", name_value, f"for {name}")
+    # st.write(name, ": ", name_value)
+    with c1:
+        name_value = st.slider(f"{name}:", 0.0, 10.0, 5.0, 0.25)
+    with c2:
+        # st.write("You chose", name_value, f"for {name}")
+        st.write("")
+        st.write("")
+        st.write(name_value)
+        st.write("")
+        st.write("")
     return name_value
 
 skating_skills_score = create_pcs_sliders("skating skills")
