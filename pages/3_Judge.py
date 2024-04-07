@@ -74,8 +74,8 @@ with c2:
                     with engine.connect() as conn:
                         print("Connected to DB")
                         goe_query = f"""
-                            INSERT INTO main.judge_goe (user_id, program_id, element_number, judge_1)
-                            VALUES ('{st.session_state.user_id}', '{st.session_state.program_id}', '{row_num}', '{i-5}')
+                            INSERT INTO main.judge_goe (user_id, program_id, element_number, goe, judge_1)
+                            VALUES ('{st.session_state.user_id}', '{st.session_state.program_id}', '{row_num}', '{i-5}', '{i-5}')
                         """
                         conn.execute(text(goe_query))
                         conn.commit()
