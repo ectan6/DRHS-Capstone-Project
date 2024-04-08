@@ -7,7 +7,7 @@
 CREATE TABLE main.spins_steps (
 	spin_id varchar NOT NULL,
 	"element" varchar NULL,
-	levelb float4 NULL,
+	level0 float4 NULL,
 	level1 float4 NULL,
 	level2 float4 NULL,
 	level3 float4 NULL,
