@@ -19,23 +19,17 @@ engine = create_engine(f"postgresql+psycopg2://postgres:{postgres_password}@loca
 st.title("Results for " + st.session_state.competition_name + ", program " + str(st.session_state.program_id))
 
 c1, c2, c3, c4, c5 = st.columns(5)
-with c1:
-    st.write("Name")
-    st.write("")
-    st.write(st.session_state.user_name)
-with c2:
-    st.write("Total Segment Score")
+c1.write("Name")
+c1.write("")
+c2.write("Total Segment Score")
+c3.write("Total Element Score")
+c4.write("Total Program Component Score (Factored)")
+c5.write("Total Deductions")
 
-with c3:
-    st.write("Total Element Score")
-    
-with c4:
-    st.write("Total Program Component Score (Factored)")
+c6, c7, c8, c9, c10 = st.columns(5)
+c6.write(st.session_state.user_name)
 
-with c5:
-    st.write("Total Deductions")
-
-st.divider()
+st.divider() # --------------------------------------------------
 
 with engine.connect() as conn:
     judge_table = pd.read_sql(f"SELECT * FROM main.readable_elements WHERE program_id = {st.session_state.program_id} and user_id = {st.session_state.user_id} ORDER BY order_executed", conn)
@@ -102,29 +96,52 @@ elements["Base Value"] = list_for_df_scores
 goes = goe_table["judge_1"].values
 elements["GOE"] = goes
 elements["Judge Score"] = goes
+# scores of panel = bv + goe
+scores_of_panel = []
+for e in elements.index:
+    scores_of_panel.append(elements["Base Value"].values[e] + elements["GOE"].values[e])
+print("scores_of_panel", scores_of_panel)
+elements["Scores of Panel"] = scores_of_panel
 st.dataframe(elements, hide_index= True, column_config={
         "order_executed": "#", 
         "element": "Element", 
         "Base Value": "Base Value", 
         "GOE": "GOE", 
-        "Judge Score": "Judge Score"
-        }
+        "Judge Score": "Judge Score",
+        "Scores of Panel": "Scores of Panel"
+        },
+        use_container_width=True
     )
+
+tes = 0
+for sop in scores_of_panel:
+    tes += sop
+c8.write(tes.round(1))
 
 # ----------------------------------------------
 
-# df for pcs - need to display factor and totals
-st.dataframe(
-    pcs_table,
-    hide_index=True,
-    column_config={
-        "id": None,
-        "user_id": None,
-        "program_id": None,
-        "skating_skills": "Skating Skills",
-        "transitions": "Transitions",
-        "performance": "Performance",
-        "choreography": "Choreography",
-        "interpretation": "Interpretation"
+judge_1_pcs = [pcs_table["skating_skills"].values[0], pcs_table["transitions"].values[0], pcs_table["performance"].values[0], pcs_table["choreography"].values[0], pcs_table["interpretation"].values[0]]
+pcs_df = pd.DataFrame(judge_1_pcs, columns=["Judge 1"])
+factor = [0.8, 0.8, 0.8, 0.8, 0.8]
+pcs_df["Factor"] = factor
+pcs_df["Factored PCS"] = pcs_df["Judge 1"] * pcs_df["Factor"]
+
+fpcs_score = 0
+for fpcs in pcs_df["Factored PCS"]:
+    fpcs_score += fpcs
+c9.write(round(fpcs_score, 1))
+
+st.dataframe(pcs_df, hide_index=True, column_config={
+        "Judge 1": "Judge 1", 
+        "Factor": "Factor", 
+        "Factored PCS": "Factored PCS"
         },
-)
+        use_container_width=True
+    )
+
+deductions = 0
+st.write("Deductions: ", deductions)
+c10.write(0)
+
+total_segment_score = tes + fpcs_score - deductions
+c7.write(round(total_segment_score, 1))

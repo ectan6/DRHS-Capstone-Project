@@ -122,3 +122,4 @@ if st.button("submit pcs", key="submit-judge-pcs"):
         conn.execute(text(pcs_query))
         conn.commit()
         print("Inserted PCS scores")
+    st.snow()
