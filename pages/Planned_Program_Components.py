@@ -159,7 +159,6 @@ def ppc_options(element_number: int):
     print(ppc_i)
     ppc_i_string = "+".join(i for i in ppc_i)
     print(ppc_i_string)
-    st.write(ppc_i_string)
 
 
 # I want to have the label default to "enter an element" and then change to the name of the element
