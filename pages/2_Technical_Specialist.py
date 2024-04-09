@@ -1,3 +1,4 @@
+import time
 import streamlit as st
 from menu import menu_with_redirect
 from sqlalchemy import create_engine, text
@@ -44,6 +45,7 @@ if st.session_state.role not in ["technical specialist", "judge"]:
     st.stop()
 
 st.title("Technical Specialist Screen")
+
 
 # function for adding elements to the score table in the database
 def click_button(jump_id: str, spin_id: str, spin_level: int):
@@ -331,7 +333,7 @@ element_string = "+".join(element.print_element() for element in element_column)
 # If selected element is less than the max, display a button to increment it
 if st.session_state.selected_element < MAX_ELEMENTS:
     # Create a button to increment the selected element
-    if st.button("Increment Element", use_container_width=True):
+    if st.button("Submit element + Next", use_container_width=True):
         if "modal_selected_element" in st.session_state:
             st.session_state.modal_selected_element += 1
         else:
@@ -362,3 +364,8 @@ st.dataframe(
 
 # if st.button("submit", key="submit-techspecialist"):
     # st.snow()
+
+st.toast("After entering the element, click the 'Submit element + Next' button.")
+time.sleep(1)
+st.toast("Then go to the Judge tab to select the GOE!")
+         

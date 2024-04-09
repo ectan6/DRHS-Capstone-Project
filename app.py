@@ -108,3 +108,8 @@ if "competition_name" not in st.session_state:
 
 
 print("Session state from app.py ", st.session_state.to_dict())
+
+if st.session_state.role == "competitor":
+    st.toast("Click the 'Planned Program Components' tab to begin entering your program components.")
+elif st.session_state.role == "technical specialist" or st.session_state.role == "judge":
+    st.toast("Click the 'Technical Specialist tab to begin judging.")

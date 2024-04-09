@@ -28,6 +28,8 @@ with engine.connect() as conn:
 st.title(f"Planned Program Components for {st.session_state.user_name}")
 st.subheader(f"Event: {st.session_state.competition_name} on {competition_date}")
 
+st.toast("Selected PPC shows up on the bottom of the page!")
+
 # something to consider: multiple tabs for multiple programs (short and long) ?
 # t1, t2 = st.tabs(["short program", "long program"])
 # with t1:
