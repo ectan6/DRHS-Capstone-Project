@@ -1,7 +1,7 @@
 import streamlit as st
 from menu import menu
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 load_dotenv()
 import os
@@ -81,6 +81,19 @@ with engine.connect() as conn:
 
 # add program selector here
 st.session_state.program_id = st.selectbox("Select a program: ", program_id_list)
+
+# button to clear database tables
+if st.button("Clear Database Tables"):
+    with engine.connect() as conn:
+        conn.execute(text("DELETE FROM main.judge_goe"))
+        conn.execute(text("DELETE FROM main.score"))
+        conn.execute(text("DELETE FROM main.pcs"))
+        conn.execute(text("DELETE FROM main.readable_elements"))
+        conn.execute(text("DELETE FROM main.ppc"))
+        conn.commit()
+        print("Database tables cleared")
+        st.toast("Database tables cleared")
+
 
 menu()  # render dynamic menu
 
