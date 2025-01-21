@@ -11,6 +11,4 @@ Make sure you have the database tables set up, then, in the terminal, type:
 Streamlit run app.py
 
 Credits: 
-Huge thank you to my mentor, Chad Baily! My no 1 fr fr
-
-pls dont change anything tyyyyy :)
+Huge thank you to my mentor, Chad Baily!
